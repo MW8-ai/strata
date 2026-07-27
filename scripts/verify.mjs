@@ -30,7 +30,11 @@ async function load(name) {
   return Promise.all(
     files.map(async (f) => {
       const raw = await readFile(join(dir, f), 'utf8');
-      const m = raw.match(/^---\n([\s\S]*?)\n---/);
+      // Tolerate CRLF. A Windows checkout with the default core.autocrlf hands
+      // us "---\r\n", and an LF-only pattern reports every file in the archive
+      // as missing its frontmatter, which reads as 60 content failures rather
+      // than as one line-ending problem.
+      const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
       if (!m) { fail(f, 'missing YAML frontmatter'); return { id: basename(f, '.md'), file: f, data: {} }; }
       let data = {};
       try { data = parse(m[1]) ?? {}; } catch (e) { fail(f, `unparseable frontmatter: ${e.message}`); }
