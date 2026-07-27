@@ -3,7 +3,7 @@
 
   Two rules govern everything here:
   1. Colour encodes primitive_class. It is data, not decoration.
-     Adding a class to src/content/config.ts means adding a band token below.
+     Adding a class to src/content.config.ts means adding a band token below.
   2. Fill pattern encodes verification. Solid is verified, hatched is reported,
      dotted outline is unknown. This is why the source policy is legible at a
      glance instead of buried in a footnote.

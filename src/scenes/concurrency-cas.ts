@@ -48,44 +48,35 @@ export const concurrencyCas: Scene = {
     {
       caption:
         'Agent A drafts an edit and commits. The file content changes, so the hash changes to b7c2.',
+      text: { '.cas-hash': 'b7c2' },
       build: (tl, svg) => {
         tl.to(svg.querySelector('.cas-read-a'), { attr: { cx: 400, cy: 215 }, duration: 0.5 })
           .to(svg.querySelector('.cas-hash'), { opacity: 0, duration: 0.15 })
-          .call(() => {
-            const h = svg.querySelector('.cas-hash');
-            if (h) h.textContent = 'b7c2';
-          })
           .to(svg.querySelector('.cas-hash'), { opacity: 1, duration: 0.15 });
       },
     },
     {
       caption:
         'Without a guard, Agent B now writes the draft it built from a1f3. Agent A\u2019s update is gone and nothing reports an error. This is the lost update.',
+      text: { '.cas-verdict': 'A\u2019S WRITE SILENTLY OVERWRITTEN' },
       build: (tl, svg) => {
-        const v = svg.querySelector('.cas-verdict');
-        tl.call(() => {
-          if (v) v.textContent = 'A\u2019S WRITE SILENTLY OVERWRITTEN';
-        }).to(v, { opacity: 1, duration: 0.3 });
+        tl.to(svg.querySelector('.cas-verdict'), { opacity: 1, duration: 0.3 });
       },
     },
     {
       caption:
         'With the guard, Agent B hashes again immediately before committing. b7c2 does not match the a1f3 it read, so the write is refused.',
+      text: { '.cas-verdict': 'HASH MISMATCH \u00b7 WRITE REFUSED' },
       build: (tl, svg) => {
-        const v = svg.querySelector('.cas-verdict');
-        tl.call(() => {
-          if (v) v.textContent = 'HASH MISMATCH \u00b7 WRITE REFUSED';
-        }).to(svg.querySelector('.cas-read-b'), { attr: { cx: 105, cy: 326 }, duration: 0.6 });
+        tl.to(svg.querySelector('.cas-read-b'), { attr: { cx: 105, cy: 326 }, duration: 0.6 });
       },
     },
     {
       caption:
         'Agent B re-reads, re-drafts against the current state, and retries. This is optimistic concurrency control, and it is the reason plain markdown survives a fleet.',
+      text: { '.cas-verdict': 'RE-READ \u00b7 RE-DRAFT \u00b7 RETRY' },
       build: (tl, svg) => {
-        const v = svg.querySelector('.cas-verdict');
-        tl.call(() => {
-          if (v) v.textContent = 'RE-READ \u00b7 RE-DRAFT \u00b7 RETRY';
-        }).to(svg.querySelector('.cas-read-b'), { attr: { cx: 400, cy: 215 }, duration: 0.7 });
+        tl.to(svg.querySelector('.cas-read-b'), { attr: { cx: 400, cy: 215 }, duration: 0.7 });
       },
     },
   ],

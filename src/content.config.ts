@@ -1,4 +1,16 @@
 import { defineCollection, reference, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+/**
+ * Astro 5 content layer. Each collection is a glob loader over its directory,
+ * and the entry id is the filename without extension, which is what every
+ * `reference()` value in the frontmatter is written against.
+ *
+ * The legacy `type: 'content'` mode cannot be used here: it strips `slug` out
+ * of the frontmatter before the schema sees it, and `vendors` carries a real
+ * `slug` field that the vendor routes are built from.
+ */
+const md = (dir: string) => glob({ pattern: '**/*.md', base: `./src/content/${dir}` });
 
 /* ------------------------------------------------------------------ *
  * Source policy (unchanged from v0.1)
@@ -93,7 +105,7 @@ export const METHOD_CLASS = [
  * METHODS - the primary unit of record.
  * ------------------------------------------------------------------ */
 const methods = defineCollection({
-  type: 'content',
+  loader: md('methods'),
   schema: z.object({
     name: z.string().min(1).max(80),
     class: z.enum(METHOD_CLASS),
@@ -161,7 +173,7 @@ const methods = defineCollection({
  * EVENTS - dated evidence. Secondary to methods.
  * ------------------------------------------------------------------ */
 const events = defineCollection({
-  type: 'content',
+  loader: md('events'),
   schema: z.object({
     date: z.string().date(),
     date_precision: z.enum(['day', 'month', 'quarter', 'year']),
@@ -191,7 +203,7 @@ const events = defineCollection({
 export const TOPIC_AREA = ['storage', 'retrieval', 'governance', 'lifecycle', 'evaluation', 'security'] as const;
 
 const topics = defineCollection({
-  type: 'content',
+  loader: md('topics'),
   schema: z.object({
     name: z.string().min(1).max(80),
     area: z.enum(TOPIC_AREA),
@@ -224,7 +236,7 @@ const topics = defineCollection({
 });
 
 const vendors = defineCollection({
-  type: 'content',
+  loader: md('vendors'),
   schema: z.object({
     name: z.string().min(1),
     slug: z.string().min(1),

@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import VerificationChip from '../components/VerificationChip.astro';
 import SourceList from '../components/SourceList.astro';
@@ -8,7 +8,7 @@ const events = (await getCollection('events')).sort((a, b) => b.data.date.locale
 
 const rendered = await Promise.all(
   events.map(async (e) => {
-    const { Content } = await e.render();
+    const { Content } = await render(e);
     const vendor = e.data.vendor ? await getEntry(e.data.vendor) : null;
     return { e, Content, vendor };
   })

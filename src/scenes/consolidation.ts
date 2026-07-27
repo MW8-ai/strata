@@ -75,15 +75,14 @@ export const consolidation: Scene = {
     {
       caption:
         'The output is a proposed diff against the memory store, carrying example transcripts and prevalence stats so a human can judge it. The human accepts or rejects. The store never updates itself.',
+      text: {
+        '.cons-out': 'PROPOSED: add tool-config note to team-memory.md',
+        '.cons-stat':
+          'prevalence 5 of 12 sessions \u00b7 3 example transcripts attached \u00b7 awaiting review',
+      },
       build: (tl, svg) => {
-        const out = svg.querySelector('.cons-out');
-        const stat = svg.querySelector('.cons-stat');
-        tl.call(() => {
-          if (out) out.textContent = 'PROPOSED: add tool-config note to team-memory.md';
-          if (stat) stat.textContent = 'prevalence 5 of 12 sessions \u00b7 3 example transcripts attached \u00b7 awaiting review';
-        })
-          .to(out, { opacity: 1, duration: 0.3 })
-          .to(stat, { opacity: 1, duration: 0.3 }, '<0.1');
+        tl.to(svg.querySelector('.cons-out'), { opacity: 1, duration: 0.3 })
+          .to(svg.querySelector('.cons-stat'), { opacity: 1, duration: 0.3 }, '<0.1');
       },
     },
   ],
