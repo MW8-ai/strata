@@ -1,0 +1,73 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import VerificationChip from '../components/VerificationChip.astro';
+import SourceList from '../components/SourceList.astro';
+
+const events = (await getCollection('events')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+
+const rendered = await Promise.all(
+  events.map(async (e) => {
+    const { Content } = await e.render();
+    const vendor = e.data.vendor ? await getEntry(e.data.vendor) : null;
+    return { e, Content, vendor };
+  })
+);
+
+const fmt = (date: string, precision: string) => {
+  const d = new Date(`${date}T00:00:00Z`);
+  if (precision === 'year') return d.getUTCFullYear().toString();
+  if (precision === 'quarter') return `Q${Math.floor(d.getUTCMonth() / 3) + 1} ${d.getUTCFullYear()}`;
+  const opts: Intl.DateTimeFormatOptions =
+    precision === 'month'
+      ? { year: 'numeric', month: 'long', timeZone: 'UTC' }
+      : { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+  return d.toLocaleDateString('en-GB', opts);
+};
+---
+<Base title="Timeline" current="timeline">
+  <section style="padding-block:3rem 1rem">
+    <span class="eyebrow">Canonical lane · human approved</span>
+    <h1 style="font-size:var(--step-3);max-inline-size:20ch">Every layer, with its evidence attached.</h1>
+    <p class="prose" style="color:var(--ink-soft)">
+      Six questions per entry, because a timeline that only answers what and when is a list
+      of press releases. Why and how are where the teaching happens.
+    </p>
+  </section>
+
+  <ol class="strata-list">
+    {rendered.map(({ e, Content, vendor }) => (
+      <li class="entry" id={e.id.replace(/\.md$/, '')}>
+        <div class="entry__when">
+          <div>{fmt(e.data.date, e.data.date_precision)}</div>
+          <div class="meta" style="margin-top:.4rem">{e.data.where}</div>
+        </div>
+        <div>
+          <h2 class="entry__title">{e.data.title}</h2>
+          <p class="entry__what">{e.data.what}</p>
+
+          <div class="legend" style="margin-block:0 1.2rem">
+            <VerificationChip verification={e.data.verification} klass={e.data.class} />
+            <span class="badge" data-review={e.data.review.status}>
+              <span class="badge__k">review</span>
+              <span class="badge__v">{e.data.review.status}</span>
+            </span>
+            {vendor && <span class="chip">{vendor.data.name}</span>}
+          </div>
+
+          <dl class="facets">
+            <div class="facet"><dt>Who</dt><dd>{e.data.actors.join(', ')}</dd></div>
+            <div class="facet"><dt>Why</dt><dd>{e.data.why}</dd></div>
+            <div class="facet"><dt>How</dt><dd>{e.data.how}</dd></div>
+          </dl>
+
+          <div class="prose"><Content /></div>
+
+
+          <h3 class="eyebrow" style="margin-top:1.4rem">Sources</h3>
+          <SourceList sources={e.data.sources} />
+        </div>
+      </li>
+    ))}
+  </ol>
+</Base>

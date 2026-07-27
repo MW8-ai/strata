@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+
+interface Props { title: string; description?: string; current?: string; }
+const { title, description = 'How AI memory accumulated, layer by layer.', current = '' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const nav = [
+  { href: `${base}/`, label: 'State', key: 'state' },
+  { href: `${base}/methods`, label: 'Methods', key: 'methods' },
+  { href: `${base}/topics`, label: 'Topics', key: 'topics' },
+  { href: `${base}/register`, label: 'Register', key: 'register' },
+  { href: `${base}/timeline`, label: 'Evidence', key: 'timeline' },
+  { href: `${base}/feed`, label: 'Feed', key: 'feed' },
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Strata</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main" style="position:absolute;left:-9999px">Skip to content</a>
+    <div class="shell">
+      <header class="masthead">
+        <a class="masthead__mark" href={`${base}/`}>Strata</a>
+        <nav class="masthead__nav" aria-label="Sections">
+          {nav.map((n) => (
+            <a href={n.href} aria-current={current === n.key ? 'page' : undefined}>{n.label}</a>
+          ))}
+        </nav>
+      </header>
+      <main id="main"><slot /></main>
+      <footer class="colophon">
+        <p>
+          A component of the Cornerstone Method. Canonical entries are human-approved.
+          Feed entries are unverified machine collection and are labelled as such everywhere
+          they appear. See the <a href="https://github.com/MW8-ai/strata/blob/main/docs/SOURCE-POLICY.md">source policy</a>.
+        </p>
+        <p>MIT licensed. Corrections are welcome as pull requests against the entry file.</p>
+      </footer>
+    </div>
+  </body>
+</html>

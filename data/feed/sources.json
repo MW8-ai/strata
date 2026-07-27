@@ -1,0 +1,23 @@
+{
+  "$comment": "One adapter per source. Vendor feed URLs move and break; that is expected and is why each entry carries its own last_ok and consecutive_empty. Verify every URL before first run.",
+  "sources": [
+    { "id": "anthropic-news",     "vendor": "anthropic", "kind": "rss", "url": "https://www.anthropic.com/news/rss.xml", "verified_url": false },
+    { "id": "anthropic-engineering", "vendor": "anthropic", "kind": "rss", "url": "https://www.anthropic.com/engineering/rss.xml", "verified_url": false },
+    { "id": "openai-news",        "vendor": "openai",    "kind": "rss", "url": "https://openai.com/news/rss.xml", "verified_url": false },
+    { "id": "google-ai-blog",     "vendor": "google",    "kind": "rss", "url": "https://blog.google/technology/ai/rss/", "verified_url": false },
+    { "id": "deepmind-blog",      "vendor": "google",    "kind": "rss", "url": "https://deepmind.google/blog/rss.xml", "verified_url": false },
+    { "id": "microsoft-research", "vendor": "microsoft", "kind": "rss", "url": "https://www.microsoft.com/en-us/research/feed/", "verified_url": false },
+    { "id": "azure-ai-blog",      "vendor": "microsoft", "kind": "rss", "url": "https://azure.microsoft.com/en-us/blog/feed/", "verified_url": false },
+    {
+      "id": "arxiv-memory",
+      "vendor": "academic",
+      "kind": "atom",
+      "url": "http://export.arxiv.org/api/query?search_query=cat:cs.CL+AND+abs:%22agent+memory%22&sortBy=submittedDate&sortOrder=descending&max_results=40",
+      "verified_url": false
+    }
+  ],
+  "keywords": [
+    "memory", "context window", "long context", "retrieval", "RAG",
+    "persistent", "agent", "consolidation", "skills", "context engineering"
+  ]
+}

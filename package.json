@@ -1,0 +1,28 @@
+{
+  "name": "strata",
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "type": "module",
+  "description": "A governed archive of how AI memory accumulated, and a teaching aid for the primitives that make it work.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run verify && astro build",
+    "preview": "astro preview",
+    "verify": "node scripts/verify.mjs",
+    "feeds": "node scripts/fetch_feeds.mjs",
+    "promote": "node scripts/promote.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "gsap": "^3.12.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0",
+    "yaml": "^2.5.0"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}

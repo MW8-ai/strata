@@ -1,0 +1,48 @@
+---
+/**
+ * Notes of importance. The things that bite in production and are absent
+ * from the announcement post.
+ *
+ * `check` is the concrete test. A caveat without one is an opinion, so it
+ * renders in a distinct block rather than as more prose.
+ */
+interface Caveat {
+  severity: 'critical' | 'warning' | 'note';
+  scope: string;
+  text: string;
+  check?: string;
+  compliance_relevant: boolean;
+}
+interface Props { caveats: Caveat[]; heading?: string }
+const order = { critical: 0, warning: 1, note: 2 } as const;
+const { heading = 'Before you adopt this' } = Astro.props;
+const caveats = [...Astro.props.caveats].sort((a, b) => order[a.severity] - order[b.severity]);
+const n = (s: string) => caveats.filter((c) => c.severity === s).length;
+---
+{caveats.length > 0 && (
+  <section class="caveats" aria-label={heading}>
+    <h2 class="eyebrow">{heading}</h2>
+    <p class="meta" style="margin:.2rem 0 0">
+      {n('critical')} critical · {n('warning')} warning · {n('note')} note ·
+      {caveats.filter((c) => c.compliance_relevant).length} compliance gates
+    </p>
+    <ul>
+      {caveats.map((c) => (
+        <li class="caveat" data-severity={c.severity}>
+          <div class="caveat__head">
+            <span class="caveat__sev">{c.severity}</span>
+            <span class="caveat__scope">{c.scope}</span>
+            {c.compliance_relevant && <span class="caveat__compliance">compliance gate</span>}
+          </div>
+          <p>{c.text}</p>
+          {c.check && (
+            <div class="caveat__check">
+              <span class="caveat__check-k">how to check</span>
+              <p>{c.check}</p>
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

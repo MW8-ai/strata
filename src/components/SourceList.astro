@@ -1,0 +1,17 @@
+---
+interface Source { url: string; title: string; tier: string; publisher: string; retrieved_at: string; }
+interface Props { sources: Source[] }
+const { sources } = Astro.props;
+---
+{sources.length === 0 ? (
+  <p class="meta">No source on file. This entry cannot be promoted past "unknown".</p>
+) : (
+  <ul class="sources">
+    {sources.map((s) => (
+      <li>
+        <a href={s.url} rel="noopener noreferrer">{s.title}</a>
+        <span class="meta"> · {s.publisher} · {s.tier} tier · retrieved {s.retrieved_at}</span>
+      </li>
+    ))}
+  </ul>
+)}

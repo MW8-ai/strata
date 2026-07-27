@@ -1,0 +1,144 @@
+---
+/**
+ * Landing page = the state of the practice, not a news feed.
+ *
+ * The design target is someone who last looked six months ago. They should
+ * be able to answer three questions without scrolling twice: what should I
+ * reach for now, what did I learn that is no longer the whole answer, and
+ * what is not ready yet.
+ */
+import { getCollection, getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const methods = (await getCollection('methods')).sort((a, b) => a.data.order - b.data.order);
+const vendors = await getCollection('vendors');
+
+const by = (l: string) => methods.filter((m) => m.data.lifecycle === l);
+const current = by('current');
+const additive = by('additive');
+const retired = [...by('superseded'), ...by('withdrawn')];
+const notReady = methods.filter((m) => m.data.maturity !== 'recommended' && m.data.lifecycle !== 'superseded');
+
+const criticalCount = methods.reduce(
+  (n, m) => n + m.data.caveats.filter((c) => c.severity === 'critical').length, 0
+);
+const unreviewed = methods.filter((m) => m.data.review.status === 'unreviewed').length;
+
+const vendorRows = await Promise.all(
+  vendors.map(async (v) => ({
+    v,
+    def: v.data.current_default ? await getEntry(v.data.current_default) : null,
+  }))
+);
+
+const href = (m: { id: string }) => `${base}/methods/${m.id.replace(/\.md$/, '')}`;
+const updated = new Date().toISOString().slice(0, 10);
+---
+<Base title="State of the practice" current="state">
+  <section style="padding-block:3rem 1rem">
+    <span class="eyebrow">Reviewed {updated} · Cornerstone Method component</span>
+    <h1 style="font-size:var(--step-4);max-inline-size:16ch">If you have been away six months, start here.</h1>
+    <p class="prose" style="font-size:var(--step-1);color:var(--ink-soft);margin-block-start:1.2rem">
+      Every method on this site carries two independent statuses. <strong>Maturity</strong> is what
+      the vendor says about readiness. <strong>Lifecycle</strong> is whether you should still reach
+      for it. They disagree constantly, and the disagreement is the useful part.
+    </p>
+    <p class="meta">
+      {methods.length} methods · {criticalCount} critical caveats on file · {unreviewed} awaiting human review
+    </p>
+  </section>
+
+  <section>
+    <h2 class="prose" style="font-size:var(--step-2)">Reach for these first</h2>
+    <p class="prose" style="color:var(--ink-soft)">Current default. Nothing has replaced them and nothing is queued to.</p>
+    <div class="board">
+      {current.map((m) => (
+        <a class="mcard" href={href(m)} data-lifecycle={m.data.lifecycle}>
+          <h3>{m.data.name}</h3>
+          <p>{m.data.one_line}</p>
+          <span class="mcard__note">since {m.data.introduced} · {m.data.maturity}</span>
+          {m.data.caveats.some((c) => c.severity === 'critical') && (
+            <span class="mcard__flag">critical caveat</span>
+          )}
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="prose" style="font-size:var(--step-2)">Still correct, no longer the whole answer</h2>
+    <p class="prose" style="color:var(--ink-soft)">
+      Additive. Keep using these. They were relieved of jobs they were never good at, not replaced.
+      This is the category most people get wrong after a gap.
+    </p>
+    <div class="board">
+      {additive.map((m) => (
+        <a class="mcard" href={href(m)} data-lifecycle={m.data.lifecycle}>
+          <h3>{m.data.name}</h3>
+          <p>{m.data.one_line}</p>
+          <span class="mcard__note">since {m.data.introduced} · {m.data.maturity}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="prose" style="font-size:var(--step-2)">Do not build on these yet</h2>
+    <p class="prose" style="color:var(--ink-soft)">
+      Preview, in development, or unproven. Worth understanding, worth prototyping against,
+      not worth a production dependency.
+    </p>
+    <div class="board">
+      {notReady.map((m) => (
+        <a class="mcard" href={href(m)} data-lifecycle={m.data.lifecycle}>
+          <h3>{m.data.name}</h3>
+          <p>{m.data.one_line}</p>
+          <span class="mcard__note">{m.data.maturity} · lifecycle {m.data.lifecycle}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="prose" style="font-size:var(--step-2)">Superseded</h2>
+    <p class="prose" style="color:var(--ink-soft)">Something replaced these for the same job. Read them for the argument, not the advice.</p>
+    <div class="board">
+      {retired.map((m) => (
+        <a class="mcard" href={href(m)} data-lifecycle={m.data.lifecycle}>
+          <h3>{m.data.name}</h3>
+          <p>{m.data.one_line}</p>
+          <span class="mcard__note">{m.data.introduced} to {m.data.sunset ?? 'unknown'}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="prose" style="font-size:var(--step-2)">Where each vendor currently sits</h2>
+    <p class="prose" style="color:var(--ink-soft)">
+      The method each vendor documents as its default today. No scores and no ranking:
+      a stance, sourced, so you can build against the right one.
+    </p>
+    {vendorRows.map(({ v, def }) => (
+      <div class="state-row">
+        <div>
+          <h3>{v.data.name}</h3>
+          <span class="meta">{def ? def.data.maturity : 'unknown'}</span>
+        </div>
+        <div>
+          <p style="margin:0 0 .5rem">{v.data.stance}</p>
+          {def
+            ? <p class="meta">Current default: <a href={href(def)}>{def.data.name}</a></p>
+            : <p class="meta">No default on file. Unknown, not none.</p>}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <div class="callout" style="margin-block-start:3rem">
+    Nothing here is a recommendation to adopt. Every method page lists what is weak and what is
+    missing alongside what works, and the critical caveats are the part to read before a
+    production decision.
+  </div>
+</Base>

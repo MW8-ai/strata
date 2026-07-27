@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Badges from '../../components/Badges.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const methods = (await getCollection('methods')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Methods" current="methods">
+  <section style="padding-block:3rem 1rem">
+    <span class="eyebrow">The archive · ordered by depth, not by date</span>
+    <h1 style="font-size:var(--step-3);max-inline-size:20ch">Methods, in the order they had to be invented.</h1>
+    <p class="prose" style="color:var(--ink-soft)">
+      Each method exists because the one before it ran out of room. Ordering is by
+      foundational depth so the sequence reads as an argument rather than a changelog.
+    </p>
+  </section>
+
+  <ol class="strata-list">
+    {methods.map((m) => (
+      <li class="entry" data-lifecycle={m.data.lifecycle}>
+        <div class="entry__when">
+          <div>{m.data.introduced}{m.data.sunset ? ` – ${m.data.sunset}` : ''}</div>
+          <div class="meta" style="margin-top:.4rem">{m.data.class}</div>
+        </div>
+        <div>
+          <h2 class="entry__title">
+            <a href={`${base}/methods/${m.id.replace(/\.md$/, '')}`}>{m.data.name}</a>
+          </h2>
+          <p class="entry__what">{m.data.one_line}</p>
+          <Badges
+            maturity={m.data.maturity}
+            lifecycle={m.data.lifecycle}
+            verification={m.data.verification}
+            review={m.data.review}
+            applies_to={m.data.applies_to}
+          />
+        </div>
+      </li>
+    ))}
+  </ol>
+</Base>

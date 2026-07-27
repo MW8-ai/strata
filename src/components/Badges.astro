@@ -1,0 +1,46 @@
+---
+/**
+ * README-style badges. Label on the left, value on the right, flat, no images.
+ * Rendered in CSS rather than pulled from a badge service so they work offline,
+ * inherit the site tokens, and carry real text for screen readers.
+ */
+interface Props {
+  maturity: string;
+  lifecycle: string;
+  verification: string;
+  review: { status: string; date?: string; note?: string };
+  applies_to?: string[];
+}
+const { maturity, lifecycle, verification, review, applies_to = [] } = Astro.props;
+
+const maturityCopy: Record<string, string> = {
+  recommended: 'vendor default',
+  preview: 'research preview',
+  development: 'in development',
+  prototype: 'unproven prototype',
+};
+const lifecycleCopy: Record<string, string> = {
+  current: 'reach for this first',
+  additive: 'still used, alongside newer',
+  superseded: 'replaced for this job',
+  withdrawn: 'discouraged',
+};
+---
+<div class="badges">
+  <span class="badge" data-maturity={maturity} title={maturityCopy[maturity]}>
+    <span class="badge__k">maturity</span><span class="badge__v">{maturity}</span>
+  </span>
+  <span class="badge" data-lifecycle={lifecycle} title={lifecycleCopy[lifecycle]}>
+    <span class="badge__k">lifecycle</span><span class="badge__v">{lifecycle}</span>
+  </span>
+  <span class="badge" data-verify={verification}>
+    <span class="badge__k">source</span><span class="badge__v">{verification}</span>
+  </span>
+  <span class="badge" data-review={review.status}>
+    <span class="badge__k">human review</span>
+    <span class="badge__v">{review.status === 'reviewed' ? `reviewed ${review.date ?? ''}`.trim() : 'not reviewed'}</span>
+  </span>
+  {applies_to.map((t) => (
+    <span class="badge badge--tag"><span class="badge__v">{t}</span></span>
+  ))}
+</div>

@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import latest from '../../data/feed/latest.json';
+import sources from '../../data/feed/sources.json';
+
+const items = (latest.items ?? []).slice(0, 120);
+const stale = latest.generated_at
+  ? (Date.now() - new Date(latest.generated_at).getTime()) / 86_400_000 > 8
+  : true;
+---
+<Base title="Feed" current="feed">
+  <section style="padding-block:3rem 1rem">
+    <span class="eyebrow">Feed lane · unverified</span>
+    <h1 style="font-size:var(--step-3);max-inline-size:22ch">Collected automatically. Believed by nobody yet.</h1>
+    <p class="prose" style="color:var(--ink-soft)">
+      Titles, links, and dates only. No article text is copied into this repository. Nothing
+      here appears in the timeline until a person reads the source, writes the why and the
+      how in their own words, and opens a pull request.
+    </p>
+    <p class="meta">
+      Last collection: {latest.generated_at ?? 'never'} ·
+      {sources.sources.length} configured sources ·
+      {items.length} items held
+    </p>
+    {stale && (
+      <div class="callout">
+        This collection is stale or has never run. Check the feeds workflow before treating
+        absence of recent items as absence of news.
+      </div>
+    )}
+  </section>
+
+  {items.length === 0 ? (
+    <p class="prose">
+      Nothing collected. Run <code>npm run feeds</code> locally, or let the scheduled workflow
+      populate <code>data/feed/latest.json</code>.
+    </p>
+  ) : (
+    <ul class="strata-list">
+      {items.map((item: any) => (
+        <li class="entry">
+          <div class="entry__when">
+            <div>{(item.published ?? '').slice(0, 10)}</div>
+            <div class="meta" style="margin-top:.4rem">{item.source_id}</div>
+          </div>
+          <div>
+            <h2 style="font-size:var(--step-1);margin-block-end:.4rem">
+              <a href={item.url} rel="noopener noreferrer">{item.title}</a>
+            </h2>
+            <span class="chip"><span class="chip__swatch" data-verification="unknown" aria-hidden="true"></span>Unverified</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>

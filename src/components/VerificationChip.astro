@@ -1,0 +1,13 @@
+---
+interface Props { verification: 'verified' | 'reported' | 'unknown'; klass: string; }
+const { verification, klass } = Astro.props;
+const wording = {
+  verified: 'Verified · official source',
+  reported: 'Reported · secondary source',
+  unknown: 'Unknown · not none',
+};
+---
+<span class="chip" data-class={klass}>
+  <span class="chip__swatch" data-class={klass} data-verification={verification} aria-hidden="true"></span>
+  {wording[verification]}
+</span>

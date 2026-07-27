@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mw8-ai.github.io/strata/schemas/event.schema.json",
+  "title": "Strata canonical event",
+  "description": "Mirror of the Zod schema in src/content/config.ts, published so other tools can validate against the archive without running Astro. src/content/config.ts is authoritative; this file follows it.",
+  "type": "object",
+  "required": ["date", "date_precision", "actors", "title", "what", "why", "how", "where", "primitive_class", "verification"],
+  "additionalProperties": false,
+  "properties": {
+    "date": { "type": "string", "format": "date" },
+    "date_precision": { "enum": ["day", "month", "quarter", "year"] },
+    "actors": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "vendor": { "type": "string" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "what": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "why": { "type": "string", "minLength": 1 },
+    "how": { "type": "string", "minLength": 1 },
+    "where": { "enum": ["paper", "api", "product", "conference", "open-source", "blog"] },
+    "primitive_class": {
+      "enum": ["context-window", "retrieval", "file-as-memory", "progressive-disclosure", "consolidation"]
+    },
+    "primitives": { "type": "array", "items": { "type": "string" } },
+    "verification": { "enum": ["verified", "reported", "unknown"] },
+    "provisional": { "type": "boolean", "default": false },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["url", "title", "tier", "publisher", "retrieved_at"],
+        "additionalProperties": false,
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "title": { "type": "string", "minLength": 1 },
+          "tier": { "enum": ["official", "reputable", "community"] },
+          "publisher": { "type": "string", "minLength": 1 },
+          "retrieved_at": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "target"],
+        "additionalProperties": false,
+        "properties": {
+          "type": { "enum": ["supersedes", "generalizes", "borrows", "responds-to"] },
+          "target": { "type": "string", "minLength": 1 },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "verification": { "const": "verified" } }, "required": ["verification"] },
+      "then": {
+        "properties": {
+          "sources": { "type": "array", "minItems": 1, "contains": { "properties": { "tier": { "const": "official" } }, "required": ["tier"] } },
+          "provisional": { "const": false }
+        },
+        "required": ["sources"]
+      }
+    }
+  ]
+}

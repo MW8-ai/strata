@@ -1,0 +1,82 @@
+---
+/**
+ * The map of the problem space, including what nobody has solved.
+ *
+ * This page is the reason the site is useful to someone who reads it once
+ * and to someone who follows it for a year. For the day visitor it is an
+ * orientation map. For the long-term reader the `gap` entries are the only
+ * part that should be changing, and when one moves to `partial` that is the
+ * single most informative event on the whole site.
+ */
+import { getCollection, getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const topics = (await getCollection('topics')).sort((a, b) => a.data.order - b.data.order);
+
+const rows = await Promise.all(
+  topics.map(async (t) => ({
+    t,
+    methods: await Promise.all(t.data.methods.map((m) => getEntry('methods', m.id))),
+  }))
+);
+
+const n = (c: string) => topics.filter((t) => t.data.coverage === c).length;
+const areas = [...new Set(topics.map((t) => t.data.area))];
+const link = (m: any) => `${base}/methods/${m.id.replace(/\.md$/, '')}`;
+---
+<Base title="Topics" current="topics">
+  <section style="padding-block:3rem 0">
+    <span class="eyebrow">The problem space · {topics.length} topics</span>
+    <h1 style="font-size:var(--step-3);max-inline-size:20ch">What the field is trying to solve, and what it has not.</h1>
+    <p class="prose" style="color:var(--ink-soft);margin-block-start:1rem">
+      A tracker that lists only what exists implies the field is finished. These are the
+      questions underneath the methods. Four of them currently have no good answer from anyone,
+      and those are the most useful pages here if you are deciding what to build.
+    </p>
+
+    <div class="tally">
+      <div data-coverage="covered"><b>{n('covered')}</b><span class="cov">covered</span></div>
+      <div data-coverage="partial"><b>{n('partial')}</b><span class="cov">partial</span></div>
+      <div data-coverage="gap"><b>{n('gap')}</b><span class="cov">open gap</span></div>
+      <div><b>{areas.length}</b><span>areas</span></div>
+    </div>
+  </section>
+
+  {rows.map(({ t, methods }) => (
+    <article class="topic" data-coverage={t.data.coverage}>
+      <div>
+        <span class="cov">{t.data.coverage}</span>
+        <h3 style="margin-block-start:.5rem">{t.data.name}</h3>
+        <span class="meta">{t.data.area}</span>
+      </div>
+      <div>
+        <p class="topic__q">{t.data.question}</p>
+        <p style="max-inline-size:var(--measure);margin:0">{t.data.why_it_matters}</p>
+
+        {methods.length > 0 && (
+          <p class="meta" style="margin-block-start:.8rem">
+            Addressed by {methods.map((m, i) => (<>{i > 0 && ', '}<a href={link(m)}>{m.data.name}</a></>))}
+          </p>
+        )}
+        {t.data.coverage === 'gap' && (
+          <p class="meta" style="margin-block-start:.8rem;color:var(--sev-critical)">
+            No method in this archive addresses this well.
+          </p>
+        )}
+
+        {t.data.open_questions.length > 0 && (
+          <>
+            <span class="eyebrow" style="margin-block-start:1rem">Open questions</span>
+            <ul class="topic__oq">{t.data.open_questions.map((q) => <li>{q}</li>)}</ul>
+          </>
+        )}
+      </div>
+    </article>
+  ))}
+
+  <div class="callout" style="margin-block-start:2.5rem">
+    A gap moving to partial is the most informative change this site can record. If you are
+    following over months, watch this page rather than the feed.
+  </div>
+</Base>

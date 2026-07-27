@@ -1,0 +1,43 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const vendors = await getCollection('vendors');
+  return vendors.map((v) => ({ params: { slug: v.data.slug }, props: { entry: v } }));
+}
+
+interface Props { entry: CollectionEntry<'vendors'> }
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const events = (await getCollection('events'))
+  .filter((e) => e.data.vendor?.id === entry.id)
+  .sort((a, b) => b.data.date.localeCompare(a.data.date));
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base title={entry.data.name} description={entry.data.stance}>
+  <section style="padding-block:3rem 1rem">
+    <span class="eyebrow">Vendor profile</span>
+    <h1 style="font-size:var(--step-3)">{entry.data.name}</h1>
+    <p class="prose" style="font-size:var(--step-1);color:var(--ink-soft)">{entry.data.stance}</p>
+  </section>
+
+  <div class="prose"><Content /></div>
+
+  <section>
+    <h2 class="prose">Entries in the archive</h2>
+    {events.length === 0 ? (
+      <p class="meta">No canonical entries yet. This is unknown, not none.</p>
+    ) : (
+      <ul class="sources" style="margin-block:1rem">
+        {events.map((e) => (
+          <li>
+            <a href={`${base}/timeline#${e.id.replace(/\.md$/, '')}`}>{e.data.title}</a>
+            <span class="meta"> · {e.data.date} · {e.data.verification}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Base>

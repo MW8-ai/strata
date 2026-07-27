@@ -1,0 +1,22 @@
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - run: npm ci
+      # Referential and policy gate. Fails the PR on a broken lineage edge,
+      # an unresolvable reference, or a "verified" claim with no official source.
+      - run: npm run verify
+      # Zod schemas run here. A malformed entry file fails the build, not the deploy.
+      - run: npx astro build

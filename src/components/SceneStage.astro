@@ -1,0 +1,27 @@
+---
+/**
+ * Host element for an animated explainer. The scene module owns the SVG
+ * and the GSAP timeline; this component owns the controls, the caption
+ * region, and the reduced-motion contract.
+ */
+interface Props { scene: string; title: string; }
+const { scene, title } = Astro.props;
+---
+<figure class="stage" data-scene={scene}>
+  <div class="stage__frame" data-scene-mount aria-label={title} role="img"></div>
+  <div class="stage__controls">
+    <button type="button" data-scene-prev>Back</button>
+    <button type="button" data-scene-next>Step</button>
+    <button type="button" data-scene-replay>Replay</button>
+    <span class="meta" data-scene-progress aria-live="polite"></span>
+  </div>
+  <figcaption class="stage__caption" data-scene-caption></figcaption>
+</figure>
+
+<script>
+  import { mountScene } from '../scenes/registry';
+  document.querySelectorAll<HTMLElement>('[data-scene]').forEach((el) => {
+    const id = el.dataset.scene;
+    if (id) mountScene(id, el);
+  });
+</script>

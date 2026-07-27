@@ -1,0 +1,41 @@
+---
+/**
+ * The signature element. A stratigraphic core sample of the archive:
+ * one band per event, oldest at the bottom, colour by method class,
+ * fill by verification. Reading it top to bottom tells you both what
+ * the field did and how well any of it is sourced.
+ */
+interface Band { label: string; klass: string; verification: string; href: string; }
+interface Props { bands: Band[] }
+const { bands } = Astro.props;
+---
+<div class="core__column" role="list" aria-label="Archive core sample, newest layer first">
+  {bands.map((b, i) => (
+    <a
+      class="core__band"
+      role="listitem"
+      href={b.href}
+      data-class={b.klass}
+      data-verification={b.verification}
+      data-label={b.label}
+      style={`--i:${i}`}
+      aria-label={b.label}
+    ></a>
+  ))}
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) {
+    const bands = document.querySelectorAll<HTMLElement>('.core__band');
+    bands.forEach((band, i) => {
+      band.animate(
+        [
+          { transform: 'scaleY(0)', opacity: 0 },
+          { transform: 'scaleY(1)', opacity: 1 },
+        ],
+        { duration: 420, delay: i * 70, easing: 'cubic-bezier(0.2,0.7,0.3,1)', fill: 'backwards' }
+      );
+    });
+  }
+</script>

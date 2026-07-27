@@ -1,0 +1,46 @@
+name: feeds
+
+on:
+  schedule:
+    # Monday 06:00 UTC. Weekly, matching the Cornerstone Method refresh cadence.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Collect feed lane
+        id: collect
+        continue-on-error: true
+        run: node scripts/fetch_feeds.mjs
+
+      - name: Commit collected items
+        run: |
+          git config user.name  "strata-bot"
+          git config user.email "strata-bot@users.noreply.github.com"
+          git add data/feed
+          if git diff --staged --quiet; then
+            echo "No feed changes."
+          else
+            git commit -m "feed: scheduled collection $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      # Deliberately after the commit. Health alarms should not discard
+      # collected data, but they must still turn the run red so a dead
+      # source gets noticed instead of quietly reading as "no news".
+      - name: Fail on source health alarms
+        if: steps.collect.outcome == 'failure'
+        run: |
+          echo "One or more sources failed or returned nothing for several consecutive runs."
+          echo "Check data/feed/latest.json -> health, then fix the adapter in data/feed/sources.json."
+          exit 1

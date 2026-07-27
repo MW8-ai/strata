@@ -1,0 +1,105 @@
+---
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Badges from '../../components/Badges.astro';
+import Caveats from '../../components/Caveats.astro';
+import Evaluation from '../../components/Evaluation.astro';
+import SourceList from '../../components/SourceList.astro';
+import SceneStage from '../../components/SceneStage.astro';
+
+export async function getStaticPaths() {
+  const methods = await getCollection('methods');
+  return methods.map((m) => ({ params: { method: m.id.replace(/\.md$/, '') }, props: { entry: m } }));
+}
+
+interface Props { entry: CollectionEntry<'methods'> }
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await entry.render();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const resolve = async (refs: { id: string }[]) =>
+  Promise.all(refs.map((r) => getEntry('methods', r.id)));
+
+const [supersededBy, usedWith, replaces] = await Promise.all([
+  resolve(d.superseded_by), resolve(d.used_with), resolve(d.replaces),
+]);
+
+const all = await getCollection('methods');
+const supersedes = all.filter((m) => m.data.superseded_by.some((r) => r.id === entry.id));
+
+const events = (await getCollection('events'))
+  .filter((e) => e.data.method?.id === entry.id)
+  .sort((a, b) => a.date?.localeCompare?.(b.date) ?? a.data.date.localeCompare(b.data.date));
+
+const link = (m: any) => `${base}/methods/${m.id.replace(/\.md$/, '')}`;
+
+const stillUsed =
+  d.lifecycle === 'current' ? 'Yes. This is the current default for its job.'
+  : d.lifecycle === 'additive' ? 'Yes, alongside newer methods. Nothing replaced it; it was relieved of jobs it was never good at.'
+  : d.lifecycle === 'superseded' ? 'Not for this job. Something else replaced it.'
+  : 'No. Removed or actively discouraged.';
+---
+<Base title={d.name} current="methods" description={d.one_line}>
+  <section style="padding-block:3rem 0">
+    <span class="eyebrow">{d.class}</span>
+    <h1 style="font-size:var(--step-3);max-inline-size:20ch;margin-block:.8rem">{d.name}</h1>
+    <p class="prose" style="font-size:var(--step-1);color:var(--ink-soft)">{d.one_line}</p>
+    <Badges
+      maturity={d.maturity} lifecycle={d.lifecycle}
+      verification={d.verification} review={d.review} applies_to={d.applies_to}
+    />
+    {d.review.status === 'unreviewed' && (
+      <div class="callout">
+        No human has reviewed this entry. Source tier and lifecycle are the author's first pass.
+        Treat the evaluation below as a starting point for your own read of the sources.
+      </div>
+    )}
+    {d.review.note && <p class="meta">{d.review.note}</p>}
+  </section>
+
+  <section class="state-row" style="border-block-start:none">
+    <div><h3 style="font-size:var(--step-1)">Is it still used?</h3></div>
+    <div>
+      <p style="margin:0 0 .6rem">{stillUsed}</p>
+      {supersededBy.length > 0 && (
+        <p class="meta">Superseded by {supersededBy.map((m) => <a href={link(m)}>{m.data.name}</a>)}</p>
+      )}
+      {supersedes.length > 0 && (
+        <p class="meta">This superseded {supersedes.map((m) => <a href={link(m)}>{m.data.name}</a>)}</p>
+      )}
+      {replaces.length > 0 && (
+        <p class="meta">Replaces {replaces.map((m) => <a href={link(m)}>{m.data.name}</a>)}</p>
+      )}
+      {usedWith.length > 0 && (
+        <p class="meta">Normally deployed with {usedWith.map((m) => <a href={link(m)}>{m.data.name}</a>)}</p>
+      )}
+    </div>
+  </section>
+
+  {d.scene && <SceneStage scene={d.scene} title={d.name} />}
+
+  <Evaluation evaluation={d.evaluation} />
+  <Caveats caveats={d.caveats} />
+
+  <div class="prose"><Content /></div>
+
+  {events.length > 0 && (
+    <section>
+      <h2 class="eyebrow" style="margin-block-start:2.5rem">Dated evidence</h2>
+      <ul class="sources" style="margin-block:1rem">
+        {events.map((e) => (
+          <li>
+            <a href={`${base}/timeline#${e.id.replace(/\.md$/, '')}`}>{e.data.title}</a>
+            <span class="meta"> · {e.data.date} · {e.data.verification}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section>
+    <h2 class="eyebrow" style="margin-block-start:2rem">Sources</h2>
+    <SourceList sources={d.sources} />
+  </section>
+</Base>

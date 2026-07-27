@@ -1,0 +1,20 @@
+---
+interface Props {
+  evaluation: { good: string[]; weak: string[]; lacking: string[]; better_if: string[] };
+}
+const { evaluation } = Astro.props;
+const blocks = [
+  { key: 'good', title: 'What is good about it', items: evaluation.good },
+  { key: 'weak', title: 'Where it is weak', items: evaluation.weak },
+  { key: 'lacking', title: 'What is missing', items: evaluation.lacking },
+  { key: 'better_if', title: 'What would make it better', items: evaluation.better_if },
+].filter((b) => b.items.length > 0);
+---
+<section class="evaluation">
+  {blocks.map((b) => (
+    <div class="evaluation__block" data-kind={b.key}>
+      <h3 class="eyebrow">{b.title}</h3>
+      <ul>{b.items.map((i) => <li>{i}</li>)}</ul>
+    </div>
+  ))}
+</section>
