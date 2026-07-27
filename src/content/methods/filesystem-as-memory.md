@@ -48,6 +48,7 @@ caveats:
   - severity: "warning"
     scope: "portability"
     text: "Portability is the reason to choose this, and it is lost the moment the store is only reachable from inside one vendor's runtime. Insist on a standalone API over the store."
+    check: "Copy the whole store to a machine with no access to the vendor runtime, then have a different vendor's agent read and edit it with ordinary file tools. Anything that stops working there is the part you cannot take with you."
     compliance_relevant: false
 scene: "concurrency-cas"
 order: 40

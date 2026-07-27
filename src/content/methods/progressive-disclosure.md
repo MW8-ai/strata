@@ -39,10 +39,12 @@ caveats:
   - severity: "warning"
     scope: "operability"
     text: "The description is a routing decision, not documentation. It is the highest leverage text in the file. Budget real effort for it and revise it when a skill fails to fire."
+    check: "Write ten task prompts a user would plausibly phrase for a given skill, without reusing the description's wording, and run them with only the descriptions visible. Record how many load the right skill. Track that number per skill and treat a fall in it as a routing regression, not as user error."
     compliance_relevant: false
   - severity: "note"
     scope: "security"
     text: "A skill body is instructions the model will follow. Skills sourced from outside your organisation are executable content and warrant the same review as a dependency."
+    check: "List every installed skill and name the person who reviewed its body and the revision they reviewed. Then confirm an updated third-party skill cannot reach agents without a fresh review, by pushing a changed body upstream and watching whether it loads. Silent adoption of a new revision is a finding."
     compliance_relevant: true
 order: 30
 ---

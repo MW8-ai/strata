@@ -29,6 +29,11 @@ repo, `src/scenes/registry.ts` is the only file that imports it and the timeline
 5. **One idea per scene.** The three shipped scenes each carry exactly one argument: the
    window dilutes before it overflows; concurrent writers lose updates without a hash guard;
    a pattern across sessions is invisible from inside one.
+6. **Words go in `text`, movement goes in `build`.** A label a step puts on screen is declared
+   in that step's `text` map, as selector to string, and the registry applies it from the step
+   index. Never set `textContent` from a timeline callback: callbacks run on the forward pass
+   only, so stepping back would leave a later step's label sitting under an earlier step's
+   caption, which is the one failure mode a teaching aid cannot have.
 
 ## Adding a scene
 

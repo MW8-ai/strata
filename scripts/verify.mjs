@@ -30,7 +30,11 @@ async function load(name) {
   return Promise.all(
     files.map(async (f) => {
       const raw = await readFile(join(dir, f), 'utf8');
-      const m = raw.match(/^---\n([\s\S]*?)\n---/);
+      // Tolerate CRLF. A Windows checkout with the default core.autocrlf hands
+      // us "---\r\n", and an LF-only pattern reports every file in the archive
+      // as missing its frontmatter, which reads as 60 content failures rather
+      // than as one line-ending problem.
+      const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
       if (!m) { fail(f, 'missing YAML frontmatter'); return { id: basename(f, '.md'), file: f, data: {} }; }
       let data = {};
       try { data = parse(m[1]) ?? {}; } catch (e) { fail(f, `unparseable frontmatter: ${e.message}`); }
@@ -119,12 +123,21 @@ for (const { file, data } of topics) {
 for (const m of methods)
   if (!claimed.has(m.id)) warn(m.file, 'not referenced by any topic; the topic map has a hole');
 
-// Every critical caveat should carry a concrete check. A critical warning you
-// cannot test is an opinion with an alarming label on it.
+// Every critical caveat must carry a concrete check. A critical warning you
+// cannot test is an opinion with an alarming label on it. This was a warning
+// while the backlog was being cleared; the backlog is clear, so it is a gate
+// now, matching hard rule 6 in CLAUDE.md.
 for (const { file, data } of methods)
   for (const c of data.caveats ?? [])
     if (c.severity === 'critical' && !c.check)
-      warn(file, `critical caveat (${c.scope}) has no "check"`);
+      fail(file, `critical caveat (${c.scope}) has no "check"`);
+
+// Security and permissioning are the scopes where an untestable caveat does the
+// most damage, so they carry the same requirement regardless of severity.
+for (const { file, data } of methods)
+  for (const c of data.caveats ?? [])
+    if (['security', 'permissioning'].includes(c.scope) && c.severity !== 'critical' && !c.check)
+      warn(file, `${c.scope} caveat (${c.severity}) has no "check"`);
 
 for (const { file, data } of vendors) {
   if (data.current_default && !methodIds.has(data.current_default))

@@ -56,7 +56,34 @@ export function mountScene(id: string, host: HTMLElement): void {
 
   let index = 0;
 
+  /**
+   * Label text is derived from the step index, not driven by the timeline.
+   * Baseline is whatever the markup shipped with, so step 0 restores it.
+   */
+  const baseline = new Map<string, string>();
+  for (const step of scene.steps) {
+    for (const selector of Object.keys(step.text ?? {})) {
+      if (!baseline.has(selector)) {
+        baseline.set(selector, svg.querySelector(selector)?.textContent ?? '');
+      }
+    }
+  }
+
+  const applyText = () => {
+    const state = new Map(baseline);
+    for (let i = 0; i <= index; i++) {
+      for (const [selector, value] of Object.entries(scene.steps[i]?.text ?? {})) {
+        state.set(selector, value);
+      }
+    }
+    for (const [selector, value] of state) {
+      const el = svg.querySelector(selector);
+      if (el) el.textContent = value;
+    }
+  };
+
   const render = () => {
+    applyText();
     if (caption) caption.textContent = scene.steps[index]?.caption ?? '';
     if (progress) progress.textContent = `${index + 1} / ${scene.steps.length}`;
   };

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mw8-ai.github.io/strata/schemas/event.schema.json",
   "title": "Strata canonical event",
-  "description": "Mirror of the Zod schema in src/content/config.ts, published so other tools can validate against the archive without running Astro. src/content/config.ts is authoritative; this file follows it.",
+  "description": "Mirror of the Zod schema in src/content.config.ts, published so other tools can validate against the archive without running Astro. src/content.config.ts is authoritative; this file follows it.",
   "type": "object",
   "required": ["date", "date_precision", "actors", "title", "what", "why", "how", "where", "primitive_class", "verification"],
   "additionalProperties": false,

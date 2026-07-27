@@ -50,6 +50,11 @@ const withCheck = all.filter((c) => c.check).length;
     </div>
   </section>
 
+  <p class="meta" data-empty hidden>
+    Nothing matches that filter. Every caveat on file currently carries a check, so this is the
+    state you want to see here; it stops being true the moment one is added without one.
+  </p>
+
   {scopes.map((scope) => (
     <section class="caveats" data-scope-group={scope}>
       <h2 class="eyebrow" style="margin-block-start:2rem">{scope}</h2>
@@ -83,6 +88,7 @@ const withCheck = all.filter((c) => c.check).length;
     const items = document.querySelectorAll<HTMLElement>('.caveat');
     const groups = document.querySelectorAll<HTMLElement>('[data-scope-group]');
     const btns = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const empty = document.querySelector<HTMLElement>('[data-empty]');
 
     const test = (el: HTMLElement, f: string) =>
       f === 'all' ? true
@@ -99,6 +105,8 @@ const withCheck = all.filter((c) => c.check).length;
         groups.forEach((g) => {
           g.hidden = ![...g.querySelectorAll<HTMLElement>('.caveat')].some((el) => !el.hidden);
         });
+        // A filter that matches nothing should say so rather than render a blank page.
+        if (empty) empty.hidden = [...items].some((el) => !el.hidden);
       })
     );
   </script>

@@ -1,6 +1,6 @@
 # Schema notes
 
-`src/content/config.ts` is authoritative. `schemas/event.schema.json` is a published mirror
+`src/content.config.ts` is authoritative. `schemas/event.schema.json` is a published mirror
 for tooling that should not have to run Astro.
 
 ## The six questions

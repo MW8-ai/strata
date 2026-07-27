@@ -36,10 +36,12 @@ caveats:
   - severity: "warning"
     scope: "security"
     text: "Retrieved content enters the context as text the model will act on. If the index contains anything a third party can write to, retrieval is an injection path."
+    check: "Enumerate every source feeding the index and mark which ones a party outside your trust boundary can write to. For one of those, plant a document carrying a benign instruction, run a query that retrieves it, and see whether the agent follows the instruction or treats it as quoted material."
     compliance_relevant: true
   - severity: "note"
     scope: "operability"
     text: "Measure retrieval separately from generation. Teams that only evaluate final answers cannot tell a reasoning failure from a retrieval miss, and the fixes are unrelated."
+    check: "Take a set of questions with known supporting documents and score two numbers: how often the right document was retrieved, and how often the answer was right given that it was. If only one number exists, the team cannot yet tell the two failure modes apart."
     compliance_relevant: false
 order: 5
 ---

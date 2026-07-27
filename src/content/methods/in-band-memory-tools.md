@@ -46,10 +46,12 @@ caveats:
   - severity: "warning"
     scope: "concurrency"
     text: "Without compare-and-swap on the write, two agents editing the same file lose one of the updates with no error raised. See the concurrency control method."
+    check: "Run two agents against one memory file with edits to different sections, timed to overlap. Read the file afterwards and confirm both edits survived. If one is missing, confirm its agent was told the write was refused rather than being reported as successful."
     compliance_relevant: false
   - severity: "note"
     scope: "data-retention"
     text: "Memory written autonomously is memory nobody chose to retain. Establish what may be written before enabling this anywhere with personal or regulated data."
+    check: "Produce the written statement of what agents may and may not record, dated before the tools were enabled, then sample a week of writes against it. Any category present in the store that the statement does not permit is a finding, and an absent statement means the feature is running outside policy."
     compliance_relevant: true
 order: 20
 ---

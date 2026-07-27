@@ -51,10 +51,12 @@ caveats:
   - severity: "warning"
     scope: "operability"
     text: "Never run this on auto-accept. Proposals are evidence for a human decision. An unattended consolidation loop drifts the store on statistically real coincidences."
+    check: "Take the last consolidation run and match every change it made to the store against a named human's recorded acceptance. Any change without one reached the store unattended, whatever the configuration says."
     compliance_relevant: false
   - severity: "note"
     scope: "cost"
     text: "Budget the job explicitly. It has no natural ceiling: cost scales with transcript volume, which grows with adoption."
+    check: "Read the token spend of the last three runs against the transcript count of each, and extrapolate to the transcript volume you expect at full adoption. Then confirm a ceiling exists in configuration and that a run which would exceed it stops rather than completing."
     compliance_relevant: false
 scene: "consolidation"
 order: 70

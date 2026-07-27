@@ -1,12 +1,13 @@
 {
-  "$comment": "One adapter per source. Vendor feed URLs move and break; that is expected and is why each entry carries its own last_ok and consecutive_empty. Verify every URL before first run.",
+  "$comment": "One adapter per source. Vendor feed URLs move and break; that is expected and is why each entry carries its own last_ok and consecutive_empty. verified_url means a person or an agent fetched this URL and got parseable RSS or Atom back with at least one item. It is not a claim that the URL works today; that is what health in latest.json is for.",
+  "$verification_status": "2026-07-27: microsoft-research fetched and confirmed (HTTP 200, application/rss+xml, 10 items parsed, 2 matching the keyword list). The other seven could not be reached from the environment this was run in, whose egress allowlist answered 403 on the CONNECT for every other host. A 403 from that proxy says nothing about whether the feed is alive, so those adapters keep verified_url false rather than being marked either way. Confirm them from an unrestricted network, or read the health block after the first real feeds workflow run, which has open egress.",
   "sources": [
     { "id": "anthropic-news",     "vendor": "anthropic", "kind": "rss", "url": "https://www.anthropic.com/news/rss.xml", "verified_url": false },
     { "id": "anthropic-engineering", "vendor": "anthropic", "kind": "rss", "url": "https://www.anthropic.com/engineering/rss.xml", "verified_url": false },
     { "id": "openai-news",        "vendor": "openai",    "kind": "rss", "url": "https://openai.com/news/rss.xml", "verified_url": false },
     { "id": "google-ai-blog",     "vendor": "google",    "kind": "rss", "url": "https://blog.google/technology/ai/rss/", "verified_url": false },
     { "id": "deepmind-blog",      "vendor": "google",    "kind": "rss", "url": "https://deepmind.google/blog/rss.xml", "verified_url": false },
-    { "id": "microsoft-research", "vendor": "microsoft", "kind": "rss", "url": "https://www.microsoft.com/en-us/research/feed/", "verified_url": false },
+    { "id": "microsoft-research", "vendor": "microsoft", "kind": "rss", "url": "https://www.microsoft.com/en-us/research/feed/", "verified_url": true },
     { "id": "azure-ai-blog",      "vendor": "microsoft", "kind": "rss", "url": "https://azure.microsoft.com/en-us/blog/feed/", "verified_url": false },
     {
       "id": "arxiv-memory",

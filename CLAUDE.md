@@ -24,7 +24,7 @@ src/content/methods/   PRIMARY record. A method is an architectural pattern.
 src/content/events/    dated evidence, each linked to a method.
 src/content/topics/    the problem space, including gaps nobody has solved.
 src/content/vendors/   vendor stance + the method each documents as default.
-src/content/config.ts  Zod schemas. The contract. Read this before editing content.
+src/content.config.ts  Zod schemas. The contract. Read this before editing content.
 src/scenes/            animated explainers, GSAP timelines over hand-authored SVG.
 scripts/verify.mjs     cross-file gate. Checks what per-file Zod cannot see.
 docs/STATUS-MODEL.md   the two-axis status model. Read before touching status fields.
