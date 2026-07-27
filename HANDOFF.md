@@ -157,12 +157,47 @@ Counts verified 2026-07-27 against the content, not carried over.
 | Feed sources verified | 1 of 8 | seven unreachable from here, not dead |
 | Scenes | 3 | context-window, concurrency-cas, consolidation |
 
-## Backlog, not urgent
+## Backlog
 
-- The core column is sticky on desktop and flips horizontal on mobile, where it loses its
-  hover labels and becomes decoration. Make it tappable or hide it below 46rem.
-- `--paper` and `--paper-raised` are close in value. If this gets presented on a projector,
-  widen that gap.
+**The core column does not render anywhere. It is dead code.** This is the one finding worth
+acting on. `src/components/CoreColumn.astro` is imported by no page, and no `.core*` class
+appears in any of the 19 built pages. The 8 `core__` rules in `src/styles/global.css` ship as
+dead CSS, `docs/SCHEMA.md` describes band colour "in the core column" as if it were live, and
+the backlog entry below was written as though it were on screen. `CLAUDE.md` calls it the
+signature element and it is the hero of the visual preview, so this reads as never wired up
+rather than deliberately cut, which is consistent with the build never having been run.
+
+The old entry read: "The core column is sticky on desktop and flips horizontal on mobile,
+where it loses its hover labels and becomes decoration. Make it tappable or hide it below
+46rem." That describes behaviour nothing currently exhibits. Fixing its mobile CSS is
+pointless until it is mounted, and mounting the signature element on the landing page is a
+design decision rather than a bug fix, so it is left for a person. If it is mounted, the
+mobile label does need solving: the bands are already `<a>` elements so they are tappable, but
+the `::after` label is positioned to the right of the band with `white-space: nowrap`, which
+on a narrow horizontal strip renders off screen.
+
+**Surface contrast is done.** `--paper` to `--paper-raised` went from 1.10:1 to 1.22:1, and
+the ladder spans 1.44:1. `--rule-hair` and `--ink-soft` moved with it so the change did not
+weaken card edges or push the badge key below AA. See the comments in `src/styles/tokens.css`
+for the numbers and the constraint on darkening `--paper` further.
+
+**18 text styles sit below the 4.5:1 WCAG AA threshold**, measured against the rendered DOM
+across five pages. None were introduced by the contrast work and none are fixed. Three
+sources:
+
+- `--ink-faint` at 2.45:1 on paper, used for `meta`, `cov`, `mcard__note`, `caveat__src`.
+  Neutral, and "faint" is clearly the intent, so darkening it is a legibility against tone
+  trade. About `#6f7a80` would clear AA.
+- The warning gold `#b8862b` at 2.60:1 and the current-lifecycle green `#2e7d6f` at 3.94:1,
+  as text in `eyebrow` and `cov`.
+- White `badge__v` text on those same two colours as backgrounds, 3.00:1 and 3.18:1.
+
+The last two are the awkward ones: those colours encode `maturity`, `lifecycle` and severity,
+and `CLAUDE.md` is explicit that colour is data here, not decoration. Changing them changes
+the encoding, and the band tokens are shared with the scenes. The fix is probably to stop
+using a data colour as text colour rather than to re-pick the palette, but that is a
+maintainer's call.
+
 - `docs/ANIMATION.md` notes that `src/scenes/registry.ts` is the only file importing GSAP,
   deliberately, so the dependency stays swappable. Still true. Keep it that way.
 - The four open topic gaps are the roadmap. Do not write speculative methods to fill them.
