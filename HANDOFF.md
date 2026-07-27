@@ -128,12 +128,17 @@ both succeed.
 `astro.config.mjs` still assumes a project site at `/strata`. Change `base` if the repo is
 renamed, or remove it for a root site.
 
-**`npm audit` reports 3 vulnerabilities, 1 low and 2 high, all transitive from Astro 5**
-(`astro`, `esbuild`, `sharp`). The only fix npm offers is `astro@7`, a two-major upgrade that
-would redo the content-layer work above, so it was not taken. Exposure looks low for this
-particular site: the advisories concern SSR rendering, the dev server on Windows, and image
-processing, and this is a fully prerendered static site with no images and no user input.
-That is a judgement, not a clean bill of health. Decide deliberately rather than inheriting it.
+**Dependencies are on latest and `npm audit` is clean, 0 vulnerabilities.** Astro is on 7.1.3
+and GSAP on 3.15.0. The 3 advisories that were open against Astro 5 (`astro`, `esbuild`,
+`sharp`) are gone rather than accepted.
+
+The upgrade needed no source changes. The content-layer migration in task 1 had already moved
+this repo onto the loader API and standalone `render()`, which is what Astro 7 expects, so the
+two majors cost one line of config: **Astro 7 requires Node `>=22.12.0`** and `.nvmrc` pinned
+`20.11`. Both workflows read `node-version-file: '.nvmrc'`, so that pin, not the code, is what
+failed Dependabot's attempt at this upgrade with `Node.js v20.11.1 is not supported by Astro!`.
+`.nvmrc` is now `22.12.0` and `engines.node` matches. **Anyone with a local clone needs to
+`nvm use` again**, or the build will refuse to run.
 
 ## Current inventory
 
