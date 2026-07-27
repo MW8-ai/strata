@@ -39,14 +39,17 @@ caveats:
   - severity: "warning"
     scope: "cost"
     text: "Cost scales with file size times session count. A 4,000-token instruction file across a thousand daily sessions is a real line item, and it is invisible because it never appears as a user message."
+    check: "Token-count the instruction file, multiply by the session count for the last billing period, and compare that number against the period's total input tokens. State the resulting share out loud. If nobody can produce it from existing reporting, the cost is unmeasured rather than small."
     compliance_relevant: false
   - severity: "note"
     scope: "operability"
     text: "Treat this file as a shared codebase artifact, not personal config. If it lives outside version control it will diverge per machine and per contributor within weeks."
+    check: "Collect the file from three contributors' working copies and diff them against the version in the repository. Any difference that is not an uncommitted local change in flight means the file has drifted out of version control."
     compliance_relevant: false
   - severity: "warning"
     scope: "security"
     text: "Anything in this file reaches the model on every request. Never place credentials, internal hostnames, or restricted identifiers here. In a regulated environment treat it as data that leaves your boundary."
+    check: "Run your secret scanner over the file and over its full history, not just the current revision, and read it line by line for internal hostnames and restricted identifiers. Anything found has already left the boundary on every request since the commit that introduced it, so treat a hit as disclosed rather than as something to quietly remove."
     compliance_relevant: true
 scene: "context-window"
 order: 10

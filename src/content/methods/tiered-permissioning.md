@@ -46,6 +46,7 @@ caveats:
   - severity: "warning"
     scope: "operability"
     text: "Per-write audit records need to capture which agent, which session, which transcript, and which human approved. Anything less will not answer an incident question."
+    check: "Pick one line already sitting in the shared store and, from the audit records alone, name the agent that wrote it, the session it came from, the transcript that prompted it, and the human who approved it. Any of the four you cannot recover is the one the incident will turn on."
     compliance_relevant: true
 order: 60
 ---

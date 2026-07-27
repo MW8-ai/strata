@@ -119,12 +119,21 @@ for (const { file, data } of topics) {
 for (const m of methods)
   if (!claimed.has(m.id)) warn(m.file, 'not referenced by any topic; the topic map has a hole');
 
-// Every critical caveat should carry a concrete check. A critical warning you
-// cannot test is an opinion with an alarming label on it.
+// Every critical caveat must carry a concrete check. A critical warning you
+// cannot test is an opinion with an alarming label on it. This was a warning
+// while the backlog was being cleared; the backlog is clear, so it is a gate
+// now, matching hard rule 6 in CLAUDE.md.
 for (const { file, data } of methods)
   for (const c of data.caveats ?? [])
     if (c.severity === 'critical' && !c.check)
-      warn(file, `critical caveat (${c.scope}) has no "check"`);
+      fail(file, `critical caveat (${c.scope}) has no "check"`);
+
+// Security and permissioning are the scopes where an untestable caveat does the
+// most damage, so they carry the same requirement regardless of severity.
+for (const { file, data } of methods)
+  for (const c of data.caveats ?? [])
+    if (['security', 'permissioning'].includes(c.scope) && c.severity !== 'critical' && !c.check)
+      warn(file, `${c.scope} caveat (${c.severity}) has no "check"`);
 
 for (const { file, data } of vendors) {
   if (data.current_default && !methodIds.has(data.current_default))

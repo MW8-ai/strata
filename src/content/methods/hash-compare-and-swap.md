@@ -42,6 +42,7 @@ caveats:
   - severity: "warning"
     scope: "operability"
     text: "Cap the retry count and log exhaustion. An agent silently giving up on a memory write is indistinguishable from an agent that had nothing to write."
+    check: "Hold a write lock on the target file so every retry is guaranteed to fail, then run an agent that wants to write. It must stop at the cap and emit a distinct exhaustion record naming the file and the agent. A run that ends clean, or ends with the same log line as a no-op, is a finding."
     compliance_relevant: false
 scene: "concurrency-cas"
 order: 50

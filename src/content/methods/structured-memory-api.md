@@ -37,6 +37,7 @@ caveats:
   - severity: "note"
     scope: "portability"
     text: "Superseded for agent workloads does not mean gone. Consumer memory surfaces still use fixed-field stores because the user-facing edit and delete controls are simpler to build against a schema."
+    check: "Before migrating a fixed-field store to a filesystem store, list the user-facing controls the schema currently makes possible, view, edit, delete and export among them, and say for each how it will be served afterwards. Any control with no answer is a capability the migration removes."
     compliance_relevant: false
 order: 45
 ---
