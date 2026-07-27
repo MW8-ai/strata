@@ -112,7 +112,7 @@ will tell you which.
 ## Running it
 
 ```bash
-nvm use          # Node 20.11+
+nvm use          # Node 22.12+, the floor Astro 7 enforces
 npm install
 npm run dev      # http://localhost:4321/strata
 
