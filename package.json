@@ -14,7 +14,7 @@
     "promote": "node scripts/promote.mjs"
   },
   "dependencies": {
-    "astro": "^5.0.0",
+    "astro": "^7.1.0",
     "gsap": "^3.12.5"
   },
   "devDependencies": {
