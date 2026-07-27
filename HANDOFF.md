@@ -6,8 +6,8 @@ this file is the state of play and can be deleted once these tasks are done.
 The two documents have different lifespans on purpose. That distinction is the subject of
 this repository, so it would be embarrassing to get it wrong here.
 
-**State of play: 2026-07-27.** Tasks 1, 3 and 5 are closed. Task 2 is closed as far as an
-agent can close it. Task 4 is open and is the only remaining work, and it needs a person.
+**State of play: 2026-07-27.** Tasks 1, 2, 3 and 5 are closed. Task 4 is open and is the only
+remaining work, and it needs a person.
 
 ## Task 1 — first build. CLOSED.
 
@@ -43,26 +43,39 @@ opening state exactly, and every end state is reachable under `prefers-reduced-m
 The only console error anywhere is the Google Fonts stylesheet, which the sandbox this ran
 in cannot reach. Confirm it loads once deployed.
 
-## Task 2 — verify the feed sources. CLOSED as far as an agent can close it.
+## Task 2 — verify the feed sources. CLOSED.
 
-`microsoft-research` is confirmed: HTTP 200, `application/rss+xml`, 10 items parsed by the
-repo's own `parseItems`, 2 matching the keyword list. `verified_url` is now true.
+Settled by the first real `feeds` workflow run on 2026-07-27, on an unrestricted network,
+rather than by hand from a sandbox that could not reach seven of the eight hosts.
 
-**The other seven are unconfirmed, and their `verified_url: false` does not mean they are
-dead.** The environment this ran in routes outbound HTTPS through an egress allowlist that
-answered 403 to the CONNECT for every host except `www.microsoft.com`. A 403 from that proxy
-says nothing about the feed. Deleting an adapter on that evidence would have been worse than
-leaving it unverified, and marking it true would have been inventing a verification. The
-reason is recorded in `data/feed/sources.json` under `$verification_status`.
+**Six adapters are alive and are now `verified_url: true`**, each having returned at least one
+item: `openai-news` 58, `arxiv-memory` 37, `deepmind-blog` 7, `microsoft-research` 2,
+`google-ai-blog` 1, `azure-ai-blog` 1. 106 items are held in `data/feed/latest.json`.
 
-**To finish this:** re-run the seven from an unrestricted network, or just read the `health`
-block in `data/feed/latest.json` after the first real `feeds` workflow run, which has open
-egress. Then set the flags and delete anything genuinely dead.
+**Both Anthropic adapters were dead and have been removed.** They answered HTTP 404 from the
+origin, twice, which is real evidence rather than the proxy 403s seen earlier. Anthropic
+publishes no official RSS feed for its news page or its engineering blog, so there is no
+current URL to swap in.
 
-`npm run feeds` was run once and works end to end: it fetched, degraded gracefully on each
-blocked source, wrote `latest.json` with the collected items and a full health block, and
-wrote the monthly archive snapshot. **That output was deliberately not committed.** Its
-health block recorded seven sandbox 403s as feed rot, and the alarm exists to catch real rot.
+**That leaves a real hole: there is no Anthropic feed**, and Anthropic is the vendor most of
+this archive's 2026 content concerns. It is deliberate. The only feeds that exist are
+unofficial community mirrors that scrape the site, and adopting one would put items into the
+feed lane whose titles, links and dates come from a third-party scraper rather than the
+vendor. That is a provenance decision for a person, not a URL fix, and this repository is
+strict about provenance. If Anthropic ships an official feed, add it back as `anthropic-news`
+with `verified_url: false` and let the workflow prove it. Recorded in
+`data/feed/sources.json` under `$anthropic_gap`.
+
+`vendors/anthropic.md` had `feed_ids: ["anthropic-news", "anthropic-engineering"]` pointing at
+the removed adapters and is now `[]`, so no dangling references remain. The two stale entries
+were also pruned from the `health` block, which otherwise keeps reporting on sources that no
+longer exist.
+
+**Note on how the run reached this branch.** The `feeds` workflow checks out the repository
+default branch, and the default is still `claude/handoff-documentation-review-9x1zsp` rather
+than `main`, so the bot committed onto an open pull request branch. Setting the default to
+`main` fixes that. It also explains why that commit carries no CI run: pushes made with
+`GITHUB_TOKEN` deliberately do not trigger further workflows.
 
 ## Task 3 — fill the missing checks. CLOSED.
 
@@ -154,7 +167,8 @@ Counts verified 2026-07-27 against the content, not carried over.
 | Caveats | 24 | 9 critical, 9 warning, 6 note, 13 compliance gates |
 | Caveats with a check | 24 of 24 | |
 | Human-reviewed methods | 3 of 9 | |
-| Feed sources verified | 1 of 8 | seven unreachable from here, not dead |
+| Feed sources verified | 6 of 6 | two dead Anthropic adapters removed, no vendor feed for Anthropic |
+| Feed items held | 106 | first real collection, 2026-07-27 |
 | Scenes | 3 | context-window, concurrency-cas, consolidation |
 
 ## Backlog

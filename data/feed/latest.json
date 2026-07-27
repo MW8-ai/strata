@@ -639,18 +639,6 @@
     }
   ],
   "health": {
-    "anthropic-news": {
-      "consecutive_empty": 1,
-      "last_ok": null,
-      "last_error": "HTTP 404",
-      "last_count": 0
-    },
-    "anthropic-engineering": {
-      "consecutive_empty": 1,
-      "last_ok": null,
-      "last_error": "HTTP 404",
-      "last_count": 0
-    },
     "openai-news": {
       "consecutive_empty": 0,
       "last_ok": "2026-07-27T09:38:57.760Z",

@@ -1,20 +1,19 @@
 {
   "$comment": "One adapter per source. Vendor feed URLs move and break; that is expected and is why each entry carries its own last_ok and consecutive_empty. verified_url means a person or an agent fetched this URL and got parseable RSS or Atom back with at least one item. It is not a claim that the URL works today; that is what health in latest.json is for.",
-  "$verification_status": "2026-07-27: microsoft-research fetched and confirmed (HTTP 200, application/rss+xml, 10 items parsed, 2 matching the keyword list). The other seven could not be reached from the environment this was run in, whose egress allowlist answered 403 on the CONNECT for every other host. A 403 from that proxy says nothing about whether the feed is alive, so those adapters keep verified_url false rather than being marked either way. Confirm them from an unrestricted network, or read the health block after the first real feeds workflow run, which has open egress.",
+  "$verification_status": "2026-07-27: verified by the first real feeds workflow run, which has open egress, rather than by hand. Six adapters returned parseable RSS or Atom with at least one item and are now verified_url true: openai-news 58 items, arxiv-memory 37, deepmind-blog 7, microsoft-research 2, google-ai-blog 1, azure-ai-blog 1. The two Anthropic adapters were removed: both answered HTTP 404 from the origin, not from a proxy, and Anthropic publishes no official RSS feed for either its news page or its engineering blog. See $anthropic_gap.",
+  "$anthropic_gap": "Anthropic has no vendor feed here, and that is a real hole given how much of this archive is Anthropic-related. It is deliberate rather than an oversight. The only feeds available are unofficial community-maintained mirrors that scrape the site, and adopting one would put items into the feed lane whose titles, links and dates are produced by a third-party scraper rather than by the vendor. That is a provenance decision for a person, not a URL fix, and this repository is strict about provenance. If Anthropic ships an official feed, add it back as anthropic-news with verified_url false and let the workflow prove it.",
   "sources": [
-    { "id": "anthropic-news",     "vendor": "anthropic", "kind": "rss", "url": "https://www.anthropic.com/news/rss.xml", "verified_url": false },
-    { "id": "anthropic-engineering", "vendor": "anthropic", "kind": "rss", "url": "https://www.anthropic.com/engineering/rss.xml", "verified_url": false },
-    { "id": "openai-news",        "vendor": "openai",    "kind": "rss", "url": "https://openai.com/news/rss.xml", "verified_url": false },
-    { "id": "google-ai-blog",     "vendor": "google",    "kind": "rss", "url": "https://blog.google/technology/ai/rss/", "verified_url": false },
-    { "id": "deepmind-blog",      "vendor": "google",    "kind": "rss", "url": "https://deepmind.google/blog/rss.xml", "verified_url": false },
+    { "id": "openai-news",        "vendor": "openai",    "kind": "rss", "url": "https://openai.com/news/rss.xml", "verified_url": true },
+    { "id": "google-ai-blog",     "vendor": "google",    "kind": "rss", "url": "https://blog.google/technology/ai/rss/", "verified_url": true },
+    { "id": "deepmind-blog",      "vendor": "google",    "kind": "rss", "url": "https://deepmind.google/blog/rss.xml", "verified_url": true },
     { "id": "microsoft-research", "vendor": "microsoft", "kind": "rss", "url": "https://www.microsoft.com/en-us/research/feed/", "verified_url": true },
-    { "id": "azure-ai-blog",      "vendor": "microsoft", "kind": "rss", "url": "https://azure.microsoft.com/en-us/blog/feed/", "verified_url": false },
+    { "id": "azure-ai-blog",      "vendor": "microsoft", "kind": "rss", "url": "https://azure.microsoft.com/en-us/blog/feed/", "verified_url": true },
     {
       "id": "arxiv-memory",
       "vendor": "academic",
       "kind": "atom",
       "url": "http://export.arxiv.org/api/query?search_query=cat:cs.CL+AND+abs:%22agent+memory%22&sortBy=submittedDate&sortOrder=descending&max_results=40",
-      "verified_url": false
+      "verified_url": true
     }
   ],
   "keywords": [

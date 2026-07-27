@@ -3,7 +3,7 @@ name: "Anthropic"
 slug: "anthropic"
 stance: "Memory as a filesystem the model manages itself, with production guardrails moved into the harness once they prove out."
 current_default: "filesystem-as-memory"
-feed_ids: ["anthropic-news", "anthropic-engineering"]
+feed_ids: []
 ---
 
 Stated design principle is to do the simple thing that works, then codify what survives
