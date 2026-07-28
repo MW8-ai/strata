@@ -197,22 +197,29 @@ Counts verified 2026-07-27 against the content, not carried over.
 
 ## Backlog
 
-**The core column does not render anywhere. It is dead code.** This is the one finding worth
-acting on. `src/components/CoreColumn.astro` is imported by no page, and no `.core*` class
-appears in any of the 19 built pages. The 8 `core__` rules in `src/styles/global.css` ship as
-dead CSS, `docs/SCHEMA.md` describes band colour "in the core column" as if it were live, and
-the backlog entry below was written as though it were on screen. `CLAUDE.md` calls it the
-signature element and it is the hero of the visual preview, so this reads as never wired up
-rather than deliberately cut, which is consistent with the build never having been run.
+**The core column is mounted.** It was dead code for one build cycle: `CoreColumn.astro`
+imported by no page, `docs/SCHEMA.md` describing band colour "in the core column" as if it
+were live, `CLAUDE.md` calling it the signature element while nothing rendered it. It is now
+the landing page's hero, exactly where `global.css`'s own `.core` / `.core__lede` grid rules
+were already built for it and had been sitting unused.
 
-The old entry read: "The core column is sticky on desktop and flips horizontal on mobile,
-where it loses its hover labels and becomes decoration. Make it tappable or hide it below
-46rem." That describes behaviour nothing currently exhibits. Fixing its mobile CSS is
-pointless until it is mounted, and mounting the signature element on the landing page is a
-design decision rather than a bug fix, so it is left for a person. If it is mounted, the
-mobile label does need solving: the bands are already `<a>` elements so they are tappable, but
-the `::after` label is positioned to the right of the band with `white-space: nowrap`, which
-on a narrow horizontal strip renders off screen.
+One band per event, newest at the top, oldest at the bottom, colour by `class`, fill by
+`verification`, matching the component's own doc comment. With 5 events on file it reads thin
+today; that is honest rather than a defect; a band with no dated event behind it would have
+been exactly the padding CLAUDE.md's "unknown is not none" rule exists to prevent, so methods
+without their own event are not represented. It gets less thin as `2026-05-dreaming.md` gets
+company.
+
+The mobile label bug flagged here previously is fixed. The `::after` tooltip is positioned to
+the right of a band with `white-space: nowrap`; that works stacked vertically in a narrow
+column, and renders off screen once the column flips to a horizontal row of slivers below
+46rem. `:hover` cannot fire on touch anyway, so the tooltip is now suppressed in that media
+query rather than left broken. The band is still a real link, colour and fill pattern still
+carry the same encoding the page's own legend teaches, and the `aria-label` still reaches
+assistive tech regardless of viewport. Verified in Chromium at both 1400px and 390px: no
+horizontal overflow either width, a hover on desktop renders the correct label on screen, a
+click navigates to the right timeline anchor, and reduced motion settles every band at full
+opacity with no animation.
 
 **Surface contrast is done.** `--paper` to `--paper-raised` went from 1.10:1 to 1.22:1, and
 the ladder spans 1.44:1. `--rule-hair` and `--ink-soft` moved with it so the change did not

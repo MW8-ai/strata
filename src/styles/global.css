@@ -247,6 +247,22 @@ button:focus-visible {
   .core { grid-template-columns: 1fr; }
   .core__column { position: static; flex-direction: row; }
   .core__band { block-size: 40px; flex: 1; }
+  /*
+    The hover/focus label is positioned to the right of a band with
+    white-space: nowrap. That works when bands stack vertically in a narrow
+    column, so the label has the whole viewport width to its right. Once the
+    column flips to a horizontal row of narrow strips, the same rule places
+    the label to the right of whichever sliver triggered it, mostly off
+    screen. :hover cannot fire on touch anyway, so hiding it here loses
+    nothing a touch user had; the band is still a real link (tap navigates)
+    and still carries its meaning through colour and fill pattern, the same
+    encoding the legend below teaches. The aria-label on each band keeps the
+    text available to assistive tech regardless.
+  */
+  .core__band:hover::after,
+  .core__band:focus-visible::after {
+    content: none;
+  }
   .entry { grid-template-columns: 1fr; }
   .facet { grid-template-columns: 1fr; gap: 0.15rem; }
 }
