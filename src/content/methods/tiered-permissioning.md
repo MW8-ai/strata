@@ -26,7 +26,13 @@ evaluation:
 verification: "reported"
 review:
   status: "unreviewed"
+  note: "The primitive this pattern is built on is vendor-documented: a memory store attaches to a session with access set to read_write or read_only. The three-tier scheme in the one_line, and the write-through-review gate on the team tier specifically, are this repository's recommended architecture on top of that binary primitive, not a feature the product ships, which is why verification stays reported despite an official source."
 sources:
+  - url: "https://platform.claude.com/docs/en/managed-agents/memory"
+    title: "Using agent memory"
+    tier: "official"
+    publisher: "Anthropic"
+    retrieved_at: "2026-07-28"
   - url: "https://tessl.io/registry/ainativedev/aidevcon-2026-ldn/0.100.13/files/talk-lamis-context-engineering-dreaming/transcript.md"
     title: "Context Engineering, Memory Systems, and Dreaming (AI Native DevCon 2026 London)"
     tier: "reputable"

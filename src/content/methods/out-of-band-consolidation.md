@@ -30,8 +30,13 @@ evaluation:
 verification: "reported"
 review:
   status: "unreviewed"
-  note: "Sourced only to a machine-generated conference transcript. Replace with the vendor engineering post before this moves past reported."
+  note: "First-party docs now confirm the core mechanism this describes, including that a run never modifies its input store and always produces a separate output a person has to explicitly adopt. One evaluation claim remains sourced only to the conference transcript and is not confirmed by the official API docs, which describe a coarser whole-store accept-or-discard rather than a granular one: that the output carries prevalence statistics and example transcripts. That may still be true of the Console UI specifically, which the API docs do not cover, but it needs its own source before this moves past reported on that point."
 sources:
+  - url: "https://platform.claude.com/docs/en/managed-agents/dreams"
+    title: "Dreams"
+    tier: "official"
+    publisher: "Anthropic"
+    retrieved_at: "2026-07-28"
   - url: "https://tessl.io/registry/ainativedev/aidevcon-2026-ldn/0.100.13/files/talk-lamis-context-engineering-dreaming/transcript.md"
     title: "Context Engineering, Memory Systems, and Dreaming (AI Native DevCon 2026 London)"
     tier: "reputable"

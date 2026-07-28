@@ -26,7 +26,18 @@ evaluation:
 verification: "reported"
 review:
   status: "unreviewed"
+  note: "First-party docs confirm the pieces this rests on: the agent toolset is used autonomously within a session, and a memory store is read and written with the same file tools. Neither page frames memory maintenance itself as an agent decision the way this entry's one_line does; that framing is this repository's synthesis of the two, which is why verification stays reported despite two official sources."
 sources:
+  - url: "https://platform.claude.com/docs/en/managed-agents/tools"
+    title: "Tools"
+    tier: "official"
+    publisher: "Anthropic"
+    retrieved_at: "2026-07-28"
+  - url: "https://platform.claude.com/docs/en/managed-agents/memory"
+    title: "Using agent memory"
+    tier: "official"
+    publisher: "Anthropic"
+    retrieved_at: "2026-07-28"
   - url: "https://tessl.io/registry/ainativedev/aidevcon-2026-ldn/0.100.13/files/talk-lamis-context-engineering-dreaming/transcript.md"
     title: "Context Engineering, Memory Systems, and Dreaming (AI Native DevCon 2026 London)"
     tier: "reputable"
