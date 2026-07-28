@@ -7,5 +7,6 @@ methods: ["hash-compare-and-swap"]
 why_it_matters: "The failure is silent. No error, no log line, no way to detect it afterwards. Teams running a single agent have this problem latent and invisible until the day they scale to two."
 open_questions:
   - "Can markdown memory be merged semantically rather than only conflict-detected?"
+  - "What stops a retry loop between two conflicting agents from livelocking, and who owns the retry budget?"
 order: 30
 ---
