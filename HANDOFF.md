@@ -6,8 +6,8 @@ this file is the state of play and can be deleted once these tasks are done.
 The two documents have different lifespans on purpose. That distinction is the subject of
 this repository, so it would be embarrassing to get it wrong here.
 
-**State of play: 2026-07-27.** Tasks 1, 3 and 5 are closed. Task 2 is closed as far as an
-agent can close it. Task 4 is open and is the only remaining work, and it needs a person.
+**State of play: 2026-07-27.** Tasks 1, 2, 3 and 5 are closed. Task 4 is open and is the only
+remaining work, and it needs a person.
 
 ## Task 1 — first build. CLOSED.
 
@@ -43,26 +43,39 @@ opening state exactly, and every end state is reachable under `prefers-reduced-m
 The only console error anywhere is the Google Fonts stylesheet, which the sandbox this ran
 in cannot reach. Confirm it loads once deployed.
 
-## Task 2 — verify the feed sources. CLOSED as far as an agent can close it.
+## Task 2 — verify the feed sources. CLOSED.
 
-`microsoft-research` is confirmed: HTTP 200, `application/rss+xml`, 10 items parsed by the
-repo's own `parseItems`, 2 matching the keyword list. `verified_url` is now true.
+Settled by the first real `feeds` workflow run on 2026-07-27, on an unrestricted network,
+rather than by hand from a sandbox that could not reach seven of the eight hosts.
 
-**The other seven are unconfirmed, and their `verified_url: false` does not mean they are
-dead.** The environment this ran in routes outbound HTTPS through an egress allowlist that
-answered 403 to the CONNECT for every host except `www.microsoft.com`. A 403 from that proxy
-says nothing about the feed. Deleting an adapter on that evidence would have been worse than
-leaving it unverified, and marking it true would have been inventing a verification. The
-reason is recorded in `data/feed/sources.json` under `$verification_status`.
+**Six adapters are alive and are now `verified_url: true`**, each having returned at least one
+item: `openai-news` 58, `arxiv-memory` 37, `deepmind-blog` 7, `microsoft-research` 2,
+`google-ai-blog` 1, `azure-ai-blog` 1. 106 items are held in `data/feed/latest.json`.
 
-**To finish this:** re-run the seven from an unrestricted network, or just read the `health`
-block in `data/feed/latest.json` after the first real `feeds` workflow run, which has open
-egress. Then set the flags and delete anything genuinely dead.
+**Both Anthropic adapters were dead and have been removed.** They answered HTTP 404 from the
+origin, twice, which is real evidence rather than the proxy 403s seen earlier. Anthropic
+publishes no official RSS feed for its news page or its engineering blog, so there is no
+current URL to swap in.
 
-`npm run feeds` was run once and works end to end: it fetched, degraded gracefully on each
-blocked source, wrote `latest.json` with the collected items and a full health block, and
-wrote the monthly archive snapshot. **That output was deliberately not committed.** Its
-health block recorded seven sandbox 403s as feed rot, and the alarm exists to catch real rot.
+**That leaves a real hole: there is no Anthropic feed**, and Anthropic is the vendor most of
+this archive's 2026 content concerns. It is deliberate. The only feeds that exist are
+unofficial community mirrors that scrape the site, and adopting one would put items into the
+feed lane whose titles, links and dates come from a third-party scraper rather than the
+vendor. That is a provenance decision for a person, not a URL fix, and this repository is
+strict about provenance. If Anthropic ships an official feed, add it back as `anthropic-news`
+with `verified_url: false` and let the workflow prove it. Recorded in
+`data/feed/sources.json` under `$anthropic_gap`.
+
+`vendors/anthropic.md` had `feed_ids: ["anthropic-news", "anthropic-engineering"]` pointing at
+the removed adapters and is now `[]`, so no dangling references remain. The two stale entries
+were also pruned from the `health` block, which otherwise keeps reporting on sources that no
+longer exist.
+
+**Note on how the run reached this branch.** The `feeds` workflow checks out the repository
+default branch, and the default is still `claude/handoff-documentation-review-9x1zsp` rather
+than `main`, so the bot committed onto an open pull request branch. Setting the default to
+`main` fixes that. It also explains why that commit carries no CI run: pushes made with
+`GITHUB_TOKEN` deliberately do not trigger further workflows.
 
 ## Task 3 — fill the missing checks. CLOSED.
 
@@ -154,15 +167,51 @@ Counts verified 2026-07-27 against the content, not carried over.
 | Caveats | 24 | 9 critical, 9 warning, 6 note, 13 compliance gates |
 | Caveats with a check | 24 of 24 | |
 | Human-reviewed methods | 3 of 9 | |
-| Feed sources verified | 1 of 8 | seven unreachable from here, not dead |
+| Feed sources verified | 6 of 6 | two dead Anthropic adapters removed, no vendor feed for Anthropic |
+| Feed items held | 106 | first real collection, 2026-07-27 |
 | Scenes | 3 | context-window, concurrency-cas, consolidation |
 
-## Backlog, not urgent
+## Backlog
 
-- The core column is sticky on desktop and flips horizontal on mobile, where it loses its
-  hover labels and becomes decoration. Make it tappable or hide it below 46rem.
-- `--paper` and `--paper-raised` are close in value. If this gets presented on a projector,
-  widen that gap.
+**The core column does not render anywhere. It is dead code.** This is the one finding worth
+acting on. `src/components/CoreColumn.astro` is imported by no page, and no `.core*` class
+appears in any of the 19 built pages. The 8 `core__` rules in `src/styles/global.css` ship as
+dead CSS, `docs/SCHEMA.md` describes band colour "in the core column" as if it were live, and
+the backlog entry below was written as though it were on screen. `CLAUDE.md` calls it the
+signature element and it is the hero of the visual preview, so this reads as never wired up
+rather than deliberately cut, which is consistent with the build never having been run.
+
+The old entry read: "The core column is sticky on desktop and flips horizontal on mobile,
+where it loses its hover labels and becomes decoration. Make it tappable or hide it below
+46rem." That describes behaviour nothing currently exhibits. Fixing its mobile CSS is
+pointless until it is mounted, and mounting the signature element on the landing page is a
+design decision rather than a bug fix, so it is left for a person. If it is mounted, the
+mobile label does need solving: the bands are already `<a>` elements so they are tappable, but
+the `::after` label is positioned to the right of the band with `white-space: nowrap`, which
+on a narrow horizontal strip renders off screen.
+
+**Surface contrast is done.** `--paper` to `--paper-raised` went from 1.10:1 to 1.22:1, and
+the ladder spans 1.44:1. `--rule-hair` and `--ink-soft` moved with it so the change did not
+weaken card edges or push the badge key below AA. See the comments in `src/styles/tokens.css`
+for the numbers and the constraint on darkening `--paper` further.
+
+**18 text styles sit below the 4.5:1 WCAG AA threshold**, measured against the rendered DOM
+across five pages. None were introduced by the contrast work and none are fixed. Three
+sources:
+
+- `--ink-faint` at 2.45:1 on paper, used for `meta`, `cov`, `mcard__note`, `caveat__src`.
+  Neutral, and "faint" is clearly the intent, so darkening it is a legibility against tone
+  trade. About `#6f7a80` would clear AA.
+- The warning gold `#b8862b` at 2.60:1 and the current-lifecycle green `#2e7d6f` at 3.94:1,
+  as text in `eyebrow` and `cov`.
+- White `badge__v` text on those same two colours as backgrounds, 3.00:1 and 3.18:1.
+
+The last two are the awkward ones: those colours encode `maturity`, `lifecycle` and severity,
+and `CLAUDE.md` is explicit that colour is data here, not decoration. Changing them changes
+the encoding, and the band tokens are shared with the scenes. The fix is probably to stop
+using a data colour as text colour rather than to re-pick the palette, but that is a
+maintainer's call.
+
 - `docs/ANIMATION.md` notes that `src/scenes/registry.ts` is the only file importing GSAP,
   deliberately, so the dependency stays swappable. Still true. Keep it that way.
 - The four open topic gaps are the roadmap. Do not write speculative methods to fill them.

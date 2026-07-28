@@ -10,16 +10,42 @@
 */
 
 :root {
-  /* Ground: survey paper, cold rather than warm */
-  --paper: #e7eaec;
-  --paper-deep: #dbe0e3;
-  --paper-raised: #f2f4f5;
+  /*
+    Ground: survey paper, cold rather than warm.
+
+    Three surfaces, and the gap between them has to survive a projector. The
+    original ladder put raised and paper 1.10:1 apart, which is invisible once
+    a beamer has flattened the low end, so a card read as a floating border
+    with no panel behind it. The ladder is now 1.22:1 between neighbours and
+    1.44:1 end to end.
+
+    `paper` is darkened rather than only lifting `raised`, because `raised` had
+    almost no headroom left before white. The cost is text contrast on paper,
+    so the floor here is ink-soft, the lightest text that sits on it: 4.80:1,
+    still above the 4.5:1 AA threshold for normal text. Do not darken `paper`
+    further without re-checking that number.
+  */
+  --paper: #e2e7ea;
+  --paper-deep: #cfd6dc;
+  --paper-raised: #fcfdfd;
 
   --ink: #16191c;
-  --ink-soft: #5a656c;
+  /*
+    Secondary text. Darkened from #5a656c so it clears 4.5:1 on the darkest
+    surface it is ever set on, not just on `paper`. The badge key sets it on
+    `paper-deep`, where the old value measured 4.49:1 before the surfaces moved
+    and 4.07:1 after. It is now 4.66:1 there, 5.49:1 on paper, 6.71:1 on raised.
+  */
+  --ink-soft: #525c63;
   --ink-faint: #8b959b;
   --rule: #a8b2b8;
-  --rule-hair: #c4ccd0;
+  /*
+    Hairline, and the thing that actually delineates a card. Darkening `paper`
+    above would have dropped this from 1.35:1 to 1.31:1, making card edges
+    fainter on the same projector the change is meant to help. Restored to
+    1.39:1 so the edge improves rather than regresses.
+  */
+  --rule-hair: #bdc6cb;
 
   /* Mineral bands, one per primitive_class */
   --band-context-window: #2b3f72;
