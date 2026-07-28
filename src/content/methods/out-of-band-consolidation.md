@@ -23,7 +23,7 @@ evaluation:
   lacking:
     - "No published benchmark. Accuracy, cost, and latency improvements are stated as observations without numbers."
     - "No guidance on run frequency or on cost ceilings for the consolidation job itself."
-    - "No comparison against existing eval loops, which address an overlapping problem from a different direction."
+    - "No comparison against existing eval loops, which address an overlapping problem from a different direction. The 'Measuring whether memory helped' topic raises the same unanswered comparison from the memory side."
   better_if:
     - "Proposals carried a confidence interval rather than a raw count."
     - "Rejected proposals fed back in, so the same rejected pattern was not re-proposed every cycle."

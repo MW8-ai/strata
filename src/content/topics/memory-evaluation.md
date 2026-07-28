@@ -8,7 +8,7 @@ why_it_matters: "Accuracy, cost, and latency improvements are stated as observat
 open_questions:
   - "What is the unit of measurement: task success, token spend, time to first correct answer?"
   - "How do you separate memory quality from retrieval quality from model capability?"
-  - "How does memory evaluation relate to existing eval loops, which address an overlapping problem from a different direction?"
+  - "How does memory evaluation relate to existing eval loops, which address an overlapping problem from a different direction? Out-of-band consolidation's evaluation flags the same unanswered comparison."
 order: 80
 ---
 The most consequential gap for anyone who has to defend a budget.
