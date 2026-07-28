@@ -24,10 +24,16 @@ evaluation:
   better_if:
     - "Granularity were per-section rather than per-file."
     - "Retry carried the diff that caused the conflict, so the re-draft could account for it instead of starting over."
-verification: "reported"
+verification: "verified"
 review:
   status: "unreviewed"
+  note: "Verified against the Memory Stores API: an update call takes a content_sha256 precondition, read from the memory before drafting the edit, and the update only applies if the stored content hash still matches the one read. On mismatch the docs say to re-read and retry rather than the write silently landing. That is this method exactly."
 sources:
+  - url: "https://platform.claude.com/docs/en/managed-agents/memory"
+    title: "Using agent memory"
+    tier: "official"
+    publisher: "Anthropic"
+    retrieved_at: "2026-07-28"
   - url: "https://tessl.io/registry/ainativedev/aidevcon-2026-ldn/0.100.13/files/talk-lamis-context-engineering-dreaming/transcript.md"
     title: "Context Engineering, Memory Systems, and Dreaming (AI Native DevCon 2026 London)"
     tier: "reputable"

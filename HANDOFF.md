@@ -6,8 +6,9 @@ this file is the state of play and can be deleted once these tasks are done.
 The two documents have different lifespans on purpose. That distinction is the subject of
 this repository, so it would be embarrassing to get it wrong here.
 
-**State of play: 2026-07-27.** Tasks 1, 2, 3 and 5 are closed. Task 4 is open and is the only
-remaining work, and it needs a person.
+**State of play: 2026-07-28.** Tasks 1, 2, 3 and 5 are closed. Task 4's sourcing is closed;
+the six `review.status: unreviewed` flags across methods and events are the only remaining
+work, and only a person can close them.
 
 ## Task 1 — first build. CLOSED.
 
@@ -88,43 +89,66 @@ exists to show that ratio and a partial fill leaves it reading as a backlog.
 with no check now fails the build rather than warning, matching hard rule 6 in `CLAUDE.md`.
 Security- and permissioning-scoped caveats below critical severity warn. Tested both ways.
 
-## Task 4 — things only a human can close. OPEN. The remaining work.
+## Task 4 — sourcing is closed; review status is still open, and only a human can close it.
 
-Do not let an agent close these. The counts below are corrected; the original brief
-undercounted the transcript dependency.
+2026-07-28: `platform.claude.com` turned out to be reachable from this environment even though
+`anthropic.com` and `claude.com/blog` are not, so three first-party Anthropic docs pages got
+fetched and read: `/docs/en/managed-agents/memory`, `/docs/en/managed-agents/dreams`, and
+`/docs/en/managed-agents/tools`. Every method and event that rested on the conference
+transcript has been re-checked against them. What follows is what changed and what did not.
 
-**Six of nine methods are `review.status: unreviewed`.** Only a person can change that:
-`filesystem-as-memory`, `hash-compare-and-swap`, `in-band-memory-tools`,
-`out-of-band-consolidation`, `structured-memory-api`, `tiered-permissioning`.
+**Upgraded to `verified` with an official source, because the docs state the claim
+directly:**
+- `hash-compare-and-swap` — the Memory Stores API takes a `content_sha256` precondition on
+  update, read before the edit and checked again at write time, refused on mismatch. That is
+  this method exactly.
+- `2026-04-managed-agents-memory` — memory versions are an immutable audit trail on every
+  write, and a store is workspace-scoped and attachable to multiple sessions. "Public" was
+  dropped from `what`; the docs do not say public versus gated, only that dreaming
+  specifically gates behind a research-preview waitlist and memory does not, which is
+  suggestive but not a confirmed absence of a gate.
+- `2026-05-dreaming` — **this resolves the conflict this file used to flag.** The docs state
+  outright that a dream's input store is never modified; it always produces a separate output
+  store, and adopting it means explicitly pointing future sessions at the new one. The
+  consolidation scene's caption, "The store never updates itself," is correct. `what` and
+  `how` were rewritten to match the confirmed mechanism, dropping the transcript's more
+  granular claims (sub-agents fanning out, prevalence statistics) that the official docs do
+  not state. Those details are not contradicted, just unconfirmed; they may still be exactly
+  right and just live in the Console rather than the API docs.
 
-**Five methods and one event rest on the same machine-generated conference transcript** at
-`reputable` tier, not three and three. The methods are `filesystem-as-memory`,
-`hash-compare-and-swap`, `in-band-memory-tools`, `out-of-band-consolidation` and
-`tiered-permissioning`; the event is `2026-05-dreaming`. One transcript is carrying most of
-the archive's 2026 content, and it is the single point of failure here.
+**Given an official source but left at `reported`, because the claim is this repository's
+reading rather than the vendor's own words:**
+- `filesystem-as-memory` — the file-mount mechanism is confirmed; "markdown" is this
+  archive's read of the docs' own example convention (every example path ends `.md`), not a
+  stated requirement.
+- `in-band-memory-tools` — the docs confirm autonomous tool use generally and file-tool-based
+  memory access specifically; framing memory maintenance itself as an agent decision is this
+  archive's synthesis of the two.
+- `tiered-permissioning` — the docs confirm a binary `read_only` / `read_write` primitive per
+  store attachment; the three-tier scheme and the write-through-review gate on the team tier
+  are this repository's recommended architecture on top of that primitive, not a shipped
+  feature.
+- `out-of-band-consolidation` — the core mechanism is now confirmed (see `2026-05-dreaming`
+  above). One evaluation claim, that output carries prevalence statistics and example
+  transcripts for review, is not stated in the API docs, which describe a coarser
+  whole-store accept-or-discard. It needs its own source before it can move past `reported`.
 
-`2026-04-managed-agents-memory` is separate: it rests on a `reputable` third-party blog, not
-the transcript, and also needs a first-party source.
+Each file's `review.note` says precisely which part is confirmed and which part is this
+repository's characterisation, so the next reviewer does not have to re-derive it.
 
-**Candidate first-party sources, found by search but NOT fetched and NOT confirmed.** The
-network in this environment could not reach them, so nothing was promoted on their basis.
-Read them before using them, and remember that tier describes the source while verification
-describes the claim:
+**Still open, and still yours.** `review.status` is `unreviewed` on all six methods it was
+unreviewed on before, `filesystem-as-memory`, `hash-compare-and-swap`,
+`in-band-memory-tools`, `out-of-band-consolidation`, `structured-memory-api`,
+`tiered-permissioning`, and on both 2026 Anthropic events. None of the sourcing work above
+touched that field, on purpose: `review.status: "reviewed"` is a claim that a person read the
+entry, and fetching a source and reading it is not that. `structured-memory-api` was not
+touched at all, since nothing above concerned it; its existing `review.note` still applies.
 
-- `https://claude.com/blog/claude-managed-agents-memory` for the Managed Agents memory event
-- `https://www.anthropic.com/engineering/managed-agents` for the same
-- `https://platform.claude.com/docs/en/managed-agents/dreams` for the consolidation feature
-- `https://claude.com/blog/new-in-claude-managed-agents` for the same
-
-**One possible factual conflict, worth checking first.** Search snippets for the dreaming
-documentation suggest the vendor supports letting the process update memory automatically,
-with human review as an option rather than a requirement. The consolidation scene's closing
-caption asserts "The store never updates itself." That may be an operational recommendation
-stated as a mechanism. Read the source and decide; do not edit the caption on the strength
-of a search snippet, which is all the evidence there is right now.
-
-`structured-memory-api` and both 2026 Anthropic events carry `review.note` fields explaining
-exactly what is unconfirmed. Read those notes before touching those files.
+Two candidate URLs from the original brief were never reachable and remain unconfirmed:
+`https://claude.com/blog/claude-managed-agents-memory` and
+`https://www.anthropic.com/engineering/managed-agents`. Both returned 403 from this
+environment. If either turns out to add something the docs pages above do not already state,
+it is worth a look; otherwise the docs pages cover the same ground more precisely.
 
 ## Task 5 — deploy. CLOSED, except for one setting only an admin can change.
 
@@ -161,7 +185,7 @@ Counts verified 2026-07-27 against the content, not carried over.
 |---|---|---|
 | Methods | 9 | 4 current, 4 additive, 1 superseded |
 | Maturity | | 8 recommended, 1 preview |
-| Events | 5 | 2 verified, 3 reported |
+| Events | 5 | 4 verified, 1 reported |
 | Topics | 12 | 5 covered, 3 partial, 4 open gaps |
 | Vendors | 4 | all have a `current_default` |
 | Caveats | 24 | 9 critical, 9 warning, 6 note, 13 compliance gates |
@@ -173,22 +197,29 @@ Counts verified 2026-07-27 against the content, not carried over.
 
 ## Backlog
 
-**The core column does not render anywhere. It is dead code.** This is the one finding worth
-acting on. `src/components/CoreColumn.astro` is imported by no page, and no `.core*` class
-appears in any of the 19 built pages. The 8 `core__` rules in `src/styles/global.css` ship as
-dead CSS, `docs/SCHEMA.md` describes band colour "in the core column" as if it were live, and
-the backlog entry below was written as though it were on screen. `CLAUDE.md` calls it the
-signature element and it is the hero of the visual preview, so this reads as never wired up
-rather than deliberately cut, which is consistent with the build never having been run.
+**The core column is mounted.** It was dead code for one build cycle: `CoreColumn.astro`
+imported by no page, `docs/SCHEMA.md` describing band colour "in the core column" as if it
+were live, `CLAUDE.md` calling it the signature element while nothing rendered it. It is now
+the landing page's hero, exactly where `global.css`'s own `.core` / `.core__lede` grid rules
+were already built for it and had been sitting unused.
 
-The old entry read: "The core column is sticky on desktop and flips horizontal on mobile,
-where it loses its hover labels and becomes decoration. Make it tappable or hide it below
-46rem." That describes behaviour nothing currently exhibits. Fixing its mobile CSS is
-pointless until it is mounted, and mounting the signature element on the landing page is a
-design decision rather than a bug fix, so it is left for a person. If it is mounted, the
-mobile label does need solving: the bands are already `<a>` elements so they are tappable, but
-the `::after` label is positioned to the right of the band with `white-space: nowrap`, which
-on a narrow horizontal strip renders off screen.
+One band per event, newest at the top, oldest at the bottom, colour by `class`, fill by
+`verification`, matching the component's own doc comment. With 5 events on file it reads thin
+today; that is honest rather than a defect; a band with no dated event behind it would have
+been exactly the padding CLAUDE.md's "unknown is not none" rule exists to prevent, so methods
+without their own event are not represented. It gets less thin as `2026-05-dreaming.md` gets
+company.
+
+The mobile label bug flagged here previously is fixed. The `::after` tooltip is positioned to
+the right of a band with `white-space: nowrap`; that works stacked vertically in a narrow
+column, and renders off screen once the column flips to a horizontal row of slivers below
+46rem. `:hover` cannot fire on touch anyway, so the tooltip is now suppressed in that media
+query rather than left broken. The band is still a real link, colour and fill pattern still
+carry the same encoding the page's own legend teaches, and the `aria-label` still reaches
+assistive tech regardless of viewport. Verified in Chromium at both 1400px and 390px: no
+horizontal overflow either width, a hover on desktop renders the correct label on screen, a
+click navigates to the right timeline anchor, and reduced motion settles every band at full
+opacity with no animation.
 
 **Surface contrast is done.** `--paper` to `--paper-raised` went from 1.10:1 to 1.22:1, and
 the ladder spans 1.44:1. `--rule-hair` and `--ink-soft` moved with it so the change did not

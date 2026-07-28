@@ -28,7 +28,13 @@ evaluation:
 verification: "reported"
 review:
   status: "unreviewed"
+  note: "First-party docs confirm the file-mount mechanism: a store is mounted as a directory inside the session's sandbox and the agent reads and writes it with the same file tools it uses for the rest of the filesystem. 'Markdown' describes this repository's read of the vendor's own example convention, every example path in the docs ends .md, not a stated requirement, which is why verification stays reported despite an official source."
 sources:
+  - url: "https://platform.claude.com/docs/en/managed-agents/memory"
+    title: "Using agent memory"
+    tier: "official"
+    publisher: "Anthropic"
+    retrieved_at: "2026-07-28"
   - url: "https://tessl.io/registry/ainativedev/aidevcon-2026-ldn/0.100.13/files/talk-lamis-context-engineering-dreaming/transcript.md"
     title: "Context Engineering, Memory Systems, and Dreaming (AI Native DevCon 2026 London)"
     tier: "reputable"

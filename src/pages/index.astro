@@ -9,10 +9,32 @@
  */
 import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import CoreColumn from '../components/CoreColumn.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const methods = (await getCollection('methods')).sort((a, b) => a.data.order - b.data.order);
 const vendors = await getCollection('vendors');
+const events = (await getCollection('events')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+
+/** Matches the compact "2026-05" style the core column's hover label uses; the
+ *  full date lives on the timeline page each band links to. */
+const compactDate = (date: string, precision: string) => {
+  const [y, m] = date.split('-');
+  if (precision === 'year') return y;
+  if (precision === 'quarter') return `Q${Math.floor((parseInt(m, 10) - 1) / 3) + 1} ${y}`;
+  return `${y}-${m}`;
+};
+
+/** One band per event, newest first so it renders at the top of the column,
+ *  oldest last so it settles at the bottom. Methods with no dated event of
+ *  their own are not represented; a band with no date would be exactly the
+ *  padding CLAUDE.md's "unknown is not none" rule exists to prevent. */
+const bands = events.map((e) => ({
+  label: `${compactDate(e.data.date, e.data.date_precision)} · ${e.data.title}`,
+  klass: e.data.class,
+  verification: e.data.verification,
+  href: `${base}/timeline#${e.id.replace(/\.md$/, '')}`,
+}));
 
 const by = (l: string) => methods.filter((m) => m.data.lifecycle === l);
 const current = by('current');
@@ -36,18 +58,21 @@ const href = (m: { id: string }) => `${base}/methods/${m.id.replace(/\.md$/, '')
 const updated = new Date().toISOString().slice(0, 10);
 ---
 <Base title="State of the practice" current="state">
-  <section style="padding-block:3rem 1rem">
-    <span class="eyebrow">Reviewed {updated} · Cornerstone Method component</span>
-    <h1 style="font-size:var(--step-4);max-inline-size:16ch">If you have been away six months, start here.</h1>
-    <p class="prose" style="font-size:var(--step-1);color:var(--ink-soft);margin-block-start:1.2rem">
-      Every method on this site carries two independent statuses. <strong>Maturity</strong> is what
-      the vendor says about readiness. <strong>Lifecycle</strong> is whether you should still reach
-      for it. They disagree constantly, and the disagreement is the useful part.
-    </p>
-    <p class="meta">
-      {methods.length} methods · {criticalCount} critical caveats on file · {unreviewed} awaiting human review
-    </p>
+  <section class="core">
+    <CoreColumn bands={bands} />
+    <div class="core__lede">
+      <span class="eyebrow">Reviewed {updated} · Cornerstone Method component</span>
+      <h1 style="max-inline-size:16ch">If you have been away six months, start here.</h1>
+      <p>
+        Every method on this site carries two independent statuses. <strong>Maturity</strong> is what
+        the vendor says about readiness. <strong>Lifecycle</strong> is whether you should still reach
+        for it. They disagree constantly, and the disagreement is the useful part.
+      </p>
+    </div>
   </section>
+  <p class="meta" style="margin-block:0 1rem">
+    {methods.length} methods · {criticalCount} critical caveats on file · {unreviewed} awaiting human review
+  </p>
 
   <section>
     <h2 class="prose" style="font-size:var(--step-2)">Reach for these first</h2>
