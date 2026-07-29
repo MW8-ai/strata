@@ -177,6 +177,53 @@ failed Dependabot's attempt at this upgrade with `Node.js v20.11.1 is not suppor
 `.nvmrc` is now `22.12.0` and `engines.node` matches. **Anyone with a local clone needs to
 `nvm use` again**, or the build will refuse to run.
 
+## Vendor coverage: xAI, DeepSeek, Meta, Mistral not addable from here. OPEN.
+
+Requested 2026-07-28: track xAI, DeepSeek, and Meta alongside the four vendors already on
+file (Anthropic, OpenAI, Google, Microsoft); Mistral came up in the same conversation.
+
+**None of the four were added.** Not because there is nothing to say, each genuinely appears
+to have a memory or agent-context feature, but because `WebFetch` from this environment could
+not read a single external page to confirm any of it. This turned out not to be a per-vendor
+sourcing problem but an environment-wide one: every URL tried came back HTTP 403, including
+Wikipedia and a Substack post, so `platform.claude.com` being reachable earlier in this
+session was a one-off exception, not a sign that other vendor or reference sites would work
+too.
+
+**What `WebSearch` surfaced, unconfirmed, for whoever picks this up next:**
+
+- **Mistral, the strongest lead.** A Le Chat memory feature, view, edit, and delete entries,
+  imports from ChatGPT, and persistent memory in the Mistral Agents API, both apparently
+  announced by Mistral itself at `mistral.ai/news/memory/` and `mistral.ai/news/agents-api/`,
+  with what search described as independent coverage from VentureBeat, WinBuzzer, and ITPro.
+  None of those five URLs were fetchable from here. If confirmed, the Le Chat memory feature
+  (fixed, user-editable entries) looks like the closest fit to the existing
+  `structured-memory-api` method class, the same one OpenAI's entry uses, though the Agents
+  API's "persistent memory across conversations" claim would need its own read before
+  assuming that too.
+- **xAI (Grok).** Cross-conversation memory since roughly April 2025, and "Skills," reusable
+  expertise auto-applied when relevant, announced with Grok 4.3 in May 2026. Every source
+  found was a secondary blog of uncertain editorial standing (`memoryplugin.com`,
+  `plurality.network`, `anuma.ai`, `justthink.ai`), the kind `docs/SOURCE-POLICY.md`'s
+  `reputable` tier definition, "independent, edited, accountable for corrections," is written
+  to exclude. `x.ai` and `docs.x.ai` were both unreachable.
+- **DeepSeek.** The real story here looks like context-window scaling, a million-token window
+  for DeepSeek-V4, April 2026, rather than persistent memory. An "Engram" memory technique
+  was reported in coverage of the same release, but by that same coverage's own account,
+  Engram did not ship in the final V4; only the unrelated mHC architecture did. Framing this
+  as a memory method would likely be wrong. If it belongs anywhere yet, it may sit closer to
+  Google's "long context as the lever" framing than to any memory method here.
+- **Meta (Llama), the weakest lead, and worth a specific warning.** Most of what surfaced
+  under "Llama Memory" turned out on inspection to be **LlamaIndex**, an unrelated
+  third-party framework, not Meta's own product. A genuinely Meta-attributed "Llama 4 Agent
+  Framework" memory system was mentioned in passing by secondary sources, but nothing traced
+  back to `ai.meta.com` itself, which was also unreachable. Do not conflate the two Llamas.
+
+**To close this:** confirm any of the URLs above from a network that is not behind this
+environment's allowlist, or supply ones that are. Until then these are absence of evidence,
+not absence, per this repository's own stated policy, and a fabricated vendor profile would
+be worse than a missing one.
+
 ## Current inventory
 
 Counts verified 2026-07-27 against the content, not carried over.
