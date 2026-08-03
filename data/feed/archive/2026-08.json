@@ -697,43 +697,5 @@
       "url": "https://openai.com/index/emergence-of-grounded-compositional-language-in-multi-agent-populations",
       "published": "2017-03-15T07:00:00.000Z"
     }
-  ],
-  "health": {
-    "openai-news": {
-      "consecutive_empty": 0,
-      "last_ok": "2026-08-03T09:31:49.673Z",
-      "last_error": null,
-      "last_count": 60
-    },
-    "google-ai-blog": {
-      "consecutive_empty": 0,
-      "last_ok": "2026-08-03T09:31:49.985Z",
-      "last_error": null,
-      "last_count": 2
-    },
-    "deepmind-blog": {
-      "consecutive_empty": 0,
-      "last_ok": "2026-08-03T09:31:50.315Z",
-      "last_error": null,
-      "last_count": 7
-    },
-    "microsoft-research": {
-      "consecutive_empty": 0,
-      "last_ok": "2026-08-03T09:31:50.955Z",
-      "last_error": null,
-      "last_count": 3
-    },
-    "azure-ai-blog": {
-      "consecutive_empty": 1,
-      "last_ok": "2026-08-03T09:31:51.050Z",
-      "last_error": null,
-      "last_count": 0
-    },
-    "arxiv-memory": {
-      "consecutive_empty": 0,
-      "last_ok": "2026-08-03T09:31:51.524Z",
-      "last_error": null,
-      "last_count": 38
-    }
-  }
+  ]
 }
