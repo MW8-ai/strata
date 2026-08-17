@@ -1,6 +1,42 @@
 {
-  "generated_at": "2026-08-10T07:18:53.786Z",
+  "generated_at": "2026-08-17T06:40:10.594Z",
   "items": [
+    {
+      "source_id": "arxiv-memory",
+      "title": "LycheeMemory V2: Efficient Long-Term Memory for LLM Agents via Semantic Segment-Level Consolidation",
+      "url": "https://arxiv.org/abs/2608.12990v1",
+      "published": "2026-08-13T09:13:15.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "When Your Agent Opens the Chat App: Agent-Controlled Search over Raw Chat Logs Rivals Structured Memory",
+      "url": "https://arxiv.org/abs/2608.12888v1",
+      "published": "2026-08-13T07:10:22.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "AQuA: Recursively Self-Improving Quantitative Trading Research Agents",
+      "url": "https://arxiv.org/abs/2608.12841v1",
+      "published": "2026-08-13T05:25:42.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "ERSkill: Evolving for Skill-Guided Adaptive Memory Retrieval",
+      "url": "https://arxiv.org/abs/2608.12720v1",
+      "published": "2026-08-13T02:06:01.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "EgoCITE: Context-Augmented Indexing and Time-Aware Retrieval for Long-Horizon Egocentric Memory",
+      "url": "https://arxiv.org/abs/2608.12627v1",
+      "published": "2026-08-12T22:20:29.000Z"
+    },
+    {
+      "source_id": "azure-ai-blog",
+      "title": "The Economics of Agent Optimization: From pilots to measurable returns",
+      "url": "https://azure.microsoft.com/en-us/blog/the-economics-of-agent-optimization-from-pilots-to-measurable-returns/",
+      "published": "2026-08-12T16:00:00.000Z"
+    },
     {
       "source_id": "arxiv-memory",
       "title": "Explicit, Not Longer: What Makes Epistemic Stance Survive Memory Compression",
@@ -12,6 +48,12 @@
       "title": "Caching for the Future: Scrub Jay Episodic Memory Principles for Agent Memory Systems",
       "url": "https://arxiv.org/abs/2608.04746v1",
       "published": "2026-08-05T12:12:44.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "RoMeRL: Balancing Feedback Coverage and the Memory-Reward Trap in Self-Evolving Agent Memory via Reduced-Order Utility States",
+      "url": "https://arxiv.org/abs/2608.02508v3",
+      "published": "2026-08-03T17:07:50.000Z"
     },
     {
       "source_id": "arxiv-memory",
@@ -114,6 +156,12 @@
       "title": "Keep It InMind: Benchmarking the Implicit-Association Blind Spot in Agent Memory",
       "url": "https://arxiv.org/abs/2607.24368v1",
       "published": "2026-07-27T12:42:12.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "Harnessing agent memory to build lifelong AI partners for materials scientists",
+      "url": "https://arxiv.org/abs/2608.11224v1",
+      "published": "2026-07-25T09:11:52.000Z"
     },
     {
       "source_id": "arxiv-memory",
