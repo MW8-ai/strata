@@ -1,6 +1,18 @@
 {
-  "generated_at": "2026-08-17T06:40:10.594Z",
+  "generated_at": "2026-08-24T06:42:53.816Z",
   "items": [
+    {
+      "source_id": "arxiv-memory",
+      "title": "On the Fragility of Self-Improving Agents: Variance, Task Order, and Underspecification",
+      "url": "https://arxiv.org/abs/2608.18066v1",
+      "published": "2026-08-18T17:55:07.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "Harness the Memory: A Holistic Evaluation of Memory Substrates in Memory Agents",
+      "url": "https://arxiv.org/abs/2608.15008v1",
+      "published": "2026-08-15T03:29:48.000Z"
+    },
     {
       "source_id": "arxiv-memory",
       "title": "LycheeMemory V2: Efficient Long-Term Memory for LLM Agents via Semantic Segment-Level Consolidation",
@@ -10,8 +22,20 @@
     {
       "source_id": "arxiv-memory",
       "title": "When Your Agent Opens the Chat App: Agent-Controlled Search over Raw Chat Logs Rivals Structured Memory",
+      "url": "https://arxiv.org/abs/2608.12888v2",
+      "published": "2026-08-13T07:10:22.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "When Your Agent Opens the Chat App: Agent-Controlled Search over Raw Chat Logs Rivals Structured Memory",
       "url": "https://arxiv.org/abs/2608.12888v1",
       "published": "2026-08-13T07:10:22.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "AQuA: Recursively Self-Improving Quantitative Trading Research Agents",
+      "url": "https://arxiv.org/abs/2608.12841v2",
+      "published": "2026-08-13T05:25:42.000Z"
     },
     {
       "source_id": "arxiv-memory",
@@ -24,6 +48,12 @@
       "title": "ERSkill: Evolving for Skill-Guided Adaptive Memory Retrieval",
       "url": "https://arxiv.org/abs/2608.12720v1",
       "published": "2026-08-13T02:06:01.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "EgoCITE: Context-Augmented Indexing and Time-Aware Retrieval for Long-Horizon Egocentric Memory",
+      "url": "https://arxiv.org/abs/2608.12627v3",
+      "published": "2026-08-12T22:20:29.000Z"
     },
     {
       "source_id": "arxiv-memory",
@@ -204,6 +234,12 @@
       "title": "Narrative World Model: Narratology-Grounded Writer Memory for Long-Form Fiction",
       "url": "https://arxiv.org/abs/2607.05577v1",
       "published": "2026-07-06T19:23:52.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "When Retrieval Fails Before It Begins: Structurally Indirect Prerequisite Eviction as a Retention Failure in Agentic Memory",
+      "url": "https://arxiv.org/abs/2608.20400v1",
+      "published": "2026-07-05T22:14:59.000Z"
     },
     {
       "source_id": "arxiv-memory",
