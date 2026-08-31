@@ -1,6 +1,12 @@
 {
-  "generated_at": "2026-08-24T06:42:53.816Z",
+  "generated_at": "2026-08-31T12:24:08.046Z",
   "items": [
+    {
+      "source_id": "azure-ai-blog",
+      "title": "The Economics of Agent Optimization: Four ways to lower the cost",
+      "url": "https://azure.microsoft.com/en-us/blog/the-economics-of-agent-optimization-four-ways-to-lower-the-cost/",
+      "published": "2026-08-26T16:00:00.000Z"
+    },
     {
       "source_id": "arxiv-memory",
       "title": "On the Fragility of Self-Improving Agents: Variance, Task Order, and Underspecification",
@@ -549,14 +555,14 @@
     },
     {
       "source_id": "openai-news",
-      "title": "Workspace agents",
-      "url": "https://openai.com/academy/workspace-agents",
+      "title": "Speeding up agentic workflows with WebSockets in the Responses API",
+      "url": "https://openai.com/index/speeding-up-agentic-workflows-with-websockets",
       "published": "2026-04-22T10:00:00.000Z"
     },
     {
       "source_id": "openai-news",
-      "title": "Speeding up agentic workflows with WebSockets in the Responses API",
-      "url": "https://openai.com/index/speeding-up-agentic-workflows-with-websockets",
+      "title": "Workspace agents",
+      "url": "https://openai.com/academy/workspace-agents",
       "published": "2026-04-22T10:00:00.000Z"
     },
     {

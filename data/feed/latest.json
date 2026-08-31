@@ -1,6 +1,12 @@
 {
-  "generated_at": "2026-08-24T06:42:53.816Z",
+  "generated_at": "2026-08-31T12:24:08.046Z",
   "items": [
+    {
+      "source_id": "azure-ai-blog",
+      "title": "The Economics of Agent Optimization: Four ways to lower the cost",
+      "url": "https://azure.microsoft.com/en-us/blog/the-economics-of-agent-optimization-four-ways-to-lower-the-cost/",
+      "published": "2026-08-26T16:00:00.000Z"
+    },
     {
       "source_id": "arxiv-memory",
       "title": "On the Fragility of Self-Improving Agents: Variance, Task Order, and Underspecification",
@@ -549,14 +555,14 @@
     },
     {
       "source_id": "openai-news",
-      "title": "Workspace agents",
-      "url": "https://openai.com/academy/workspace-agents",
+      "title": "Speeding up agentic workflows with WebSockets in the Responses API",
+      "url": "https://openai.com/index/speeding-up-agentic-workflows-with-websockets",
       "published": "2026-04-22T10:00:00.000Z"
     },
     {
       "source_id": "openai-news",
-      "title": "Speeding up agentic workflows with WebSockets in the Responses API",
-      "url": "https://openai.com/index/speeding-up-agentic-workflows-with-websockets",
+      "title": "Workspace agents",
+      "url": "https://openai.com/academy/workspace-agents",
       "published": "2026-04-22T10:00:00.000Z"
     },
     {
@@ -839,39 +845,39 @@
   "health": {
     "openai-news": {
       "consecutive_empty": 0,
-      "last_ok": "2026-08-24T06:42:52.391Z",
+      "last_ok": "2026-08-31T12:23:55.970Z",
       "last_error": null,
       "last_count": 60
     },
     "google-ai-blog": {
       "consecutive_empty": 0,
-      "last_ok": "2026-08-24T06:42:52.619Z",
+      "last_ok": "2026-08-31T12:23:56.327Z",
       "last_error": null,
       "last_count": 2
     },
     "deepmind-blog": {
       "consecutive_empty": 0,
-      "last_ok": "2026-08-24T06:42:52.900Z",
+      "last_ok": "2026-08-31T12:23:56.746Z",
       "last_error": null,
       "last_count": 5
     },
     "microsoft-research": {
       "consecutive_empty": 0,
-      "last_ok": "2026-08-24T06:42:53.287Z",
+      "last_ok": "2026-08-31T12:23:57.511Z",
       "last_error": null,
       "last_count": 3
     },
     "azure-ai-blog": {
       "consecutive_empty": 0,
-      "last_ok": "2026-08-24T06:42:53.349Z",
+      "last_ok": "2026-08-31T12:23:57.580Z",
       "last_error": null,
-      "last_count": 1
+      "last_count": 2
     },
     "arxiv-memory": {
-      "consecutive_empty": 0,
+      "consecutive_empty": 1,
       "last_ok": "2026-08-24T06:42:53.808Z",
-      "last_error": null,
-      "last_count": 38
+      "last_error": "HTTP 429",
+      "last_count": 0
     }
   }
 }
