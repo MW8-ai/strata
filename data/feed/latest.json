@@ -1,6 +1,60 @@
 {
-  "generated_at": "2026-10-19T11:48:34.824Z",
+  "generated_at": "2026-10-26T12:03:54.380Z",
   "items": [
+    {
+      "source_id": "openai-news",
+      "title": "Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II)",
+      "url": "https://openai.com/index/scaling-storage-one-billion-users-part-two",
+      "published": "2026-10-23T17:00:00.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "MemoryTax: The Bitter Lesson of Agent Memory",
+      "url": "https://arxiv.org/abs/2610.29823v1",
+      "published": "2026-10-21T14:46:27.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "Uni-Mem: Learning a Long-Horizon Agentic Memory Manager with Unified Online Policy Optimization",
+      "url": "https://arxiv.org/abs/2610.29671v1",
+      "published": "2026-10-21T12:48:10.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "Memory-Centric Continual Learning for AI Agents",
+      "url": "https://arxiv.org/abs/2610.29357v1",
+      "published": "2026-10-21T07:49:42.000Z"
+    },
+    {
+      "source_id": "openai-news",
+      "title": "Patch the Planet: global response coordination as agents uncover critical vulnerabilities",
+      "url": "https://openai.com/index/coordinated-disclosure-of-critical-vulnerabilities",
+      "published": "2026-10-21T07:00:00.000Z"
+    },
+    {
+      "source_id": "openai-news",
+      "title": "Using thousands of AI agents to uncover new leads in biological data",
+      "url": "https://openai.com/index/scaling-ai-research-for-complex-biological-data",
+      "published": "2026-10-21T04:50:00.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "Whose Credential Is It? How Owner Attribution in Agent MemoryShapes Cross-User Account Misuse",
+      "url": "https://arxiv.org/abs/2610.25707v1",
+      "published": "2026-10-19T02:53:51.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "MemDerive: A Diagnostic Benchmark for Agent Memory over Evolving Data",
+      "url": "https://arxiv.org/abs/2610.25373v1",
+      "published": "2026-10-18T16:24:33.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "MemBubble: Benchmarking How Agent Memory Shapes LLM Response Diversity",
+      "url": "https://arxiv.org/abs/2610.25127v1",
+      "published": "2026-10-18T09:17:44.000Z"
+    },
     {
       "source_id": "arxiv-memory",
       "title": "GLOBE: Evolving Structured Agentic Memory for E-commerce Product Optimization in Generative Search",
@@ -66,6 +120,12 @@
       "title": "The EU’s next chapter in AI is agentic",
       "url": "https://openai.com/index/the-eus-next-chapter-in-ai-is-agentic",
       "published": "2026-10-14T00:00:00.000Z"
+    },
+    {
+      "source_id": "arxiv-memory",
+      "title": "Many Steps into One: Reasoning Contraction and the Limits of Safe Memory Reuse for LLM Agents",
+      "url": "https://arxiv.org/abs/2610.17544v2",
+      "published": "2026-10-13T01:16:37.000Z"
     },
     {
       "source_id": "arxiv-memory",
@@ -1163,39 +1223,39 @@
   "health": {
     "openai-news": {
       "consecutive_empty": 0,
-      "last_ok": "2026-10-19T11:48:32.894Z",
+      "last_ok": "2026-10-26T12:03:51.412Z",
       "last_error": null,
-      "last_count": 70
+      "last_count": 73
     },
     "google-ai-blog": {
-      "consecutive_empty": 5,
-      "last_ok": "2026-10-19T11:48:33.170Z",
+      "consecutive_empty": 6,
+      "last_ok": "2026-10-26T12:03:51.789Z",
       "last_error": null,
       "last_count": 0
     },
     "deepmind-blog": {
       "consecutive_empty": 0,
-      "last_ok": "2026-10-19T11:48:33.365Z",
+      "last_ok": "2026-10-26T12:03:51.903Z",
       "last_error": null,
       "last_count": 6
     },
     "microsoft-research": {
       "consecutive_empty": 0,
-      "last_ok": "2026-10-19T11:48:33.976Z",
+      "last_ok": "2026-10-26T12:03:52.670Z",
       "last_error": null,
       "last_count": 1
     },
     "azure-ai-blog": {
-      "consecutive_empty": 1,
-      "last_ok": "2026-10-19T11:48:34.170Z",
+      "consecutive_empty": 2,
+      "last_ok": "2026-10-26T12:03:52.784Z",
       "last_error": null,
       "last_count": 0
     },
     "arxiv-memory": {
       "consecutive_empty": 0,
-      "last_ok": "2026-10-19T11:48:34.817Z",
+      "last_ok": "2026-10-26T12:03:54.371Z",
       "last_error": null,
-      "last_count": 37
+      "last_count": 36
     }
   }
 }
